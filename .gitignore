@@ -1,0 +1,28 @@
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Credentials / secrets
+credentials.json
+*.secret
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editors
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+# Dependencies
+node_modules/
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
