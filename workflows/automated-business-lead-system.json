@@ -11,7 +11,7 @@
       "typeVersion": 2.1,
       "position": [
         0,
-        0
+        -96
       ],
       "id": "83bd8561-9a7f-427e-9626-7ab25cebc7ac",
       "name": "Webhook",
@@ -25,7 +25,7 @@
       "typeVersion": 2,
       "position": [
         224,
-        0
+        -96
       ],
       "id": "bee492cc-8b20-4373-be84-abdc3d154d71",
       "name": "Code in JavaScript"
@@ -59,7 +59,7 @@
       "typeVersion": 2.3,
       "position": [
         448,
-        0
+        -96
       ],
       "id": "f97f8b2d-b695-40dc-a68c-932656a3f91e",
       "name": "If"
@@ -187,6 +187,30 @@
           "name": "Google Sheets account"
         }
       }
+    },
+    {
+      "parameters": {
+        "chatId": "0000000000",
+        "text": "=🚨 NEW BUSINESS LEAD\n\n👤 {{ $json.name }}\n🏢 {{ $json.business }}\n\n📧 {{ $json.email }}\n📱 {{ $json.phone }}\n\n💼 {{ $json.service }}\n💰 Rp{{ Number($json.budget).toLocaleString('id-ID') }}\n\n📌 {{ $json.status }}\n🕐 {{ new Date($json.created_at).toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' }) }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        896,
+        -96
+      ],
+      "id": "47218a62-1830-4bc1-abf3-f5bd7df6a3af",
+      "name": "Send a text message",
+      "webhookId": "8c2d8b8e-0f40-44fc-8891-e24a9c4472a8",
+      "credentials": {
+        "telegramApi": {
+          "id": "3mYasKGKR9EwVqkv",
+          "name": "Telegram account"
+        }
+      }
     }
   ],
   "pinData": {},
@@ -223,6 +247,17 @@
           }
         ]
       ]
+    },
+    "Append row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "active": false,
@@ -231,7 +266,7 @@
     "binaryMode": "separate",
     "availableInMCP": false
   },
-  "versionId": "7a5f9649-4bbf-4682-9a83-a919c73e7c70",
+  "versionId": "cb89c290-f52d-4585-b458-2bb3ec45ce1d",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "1427014a05222cf37ad74b5e7780f1117196c30639dffdbfe62c4fe7f9a4fa06"

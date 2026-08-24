@@ -31,7 +31,10 @@ IF
 Google Sheets    Stop
   │
   ▼
-Lead Stored
+Telegram
+  │
+  ▼
+Lead Notification
 ```
 
 ## Features
@@ -42,7 +45,10 @@ Lead Stored
 - Automatically assign a `NEW` lead status
 - Automatically generate a creation timestamp
 - Store valid leads in Google Sheets
-- Support structured lead data for future automation
+- Send real-time Telegram notifications for new leads
+- Format lead information into a readable notification
+- Display budget in Indonesian Rupiah format
+- Display localized creation timestamps
 
 ## Lead Data
 
@@ -189,9 +195,9 @@ Automated-Business-Lead-System/
 
 ### v0.2.0 — Notifications
 
-- [ ] Telegram lead notifications
-- [ ] New lead alerts
-- [ ] Lead summary messages
+- [x] Telegram lead notifications
+- [x] New lead alerts
+- [x] Lead summary messages
 
 ### v0.3.0 — Email Automation
 
@@ -246,6 +252,19 @@ Implemented the core lead capture pipeline:
 - Google Sheets storage
 - Automatic `NEW` status
 - Automatic timestamp generation
+
+### v0.2.0 — 2026-08-25
+
+Added real-time Telegram notifications for new business leads.
+
+Implemented:
+
+- Telegram bot integration
+- Automatic new lead notifications
+- Formatted lead notification messages
+- Indonesian Rupiah budget formatting
+- Localized timestamp formatting
+
 
 ## Security Notice
 
