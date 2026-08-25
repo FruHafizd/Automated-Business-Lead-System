@@ -1,5 +1,5 @@
 {
-  "name": "Automated Business Lead System",
+  "name": "Automated Business Lead System - Template",
   "nodes": [
     {
       "parameters": {
@@ -11,7 +11,7 @@
       "typeVersion": 2.1,
       "position": [
         0,
-        -96
+        -64
       ],
       "id": "83bd8561-9a7f-427e-9626-7ab25cebc7ac",
       "name": "Webhook",
@@ -25,9 +25,9 @@
       "typeVersion": 2,
       "position": [
         224,
-        -96
+        -64
       ],
-      "id": "bee492cc-8b20-4373-be84-abdc3d154d71",
+      "id": "bee492cc-8b20-437e-9626-7abdc3d154d71",
       "name": "Code in JavaScript"
     },
     {
@@ -59,7 +59,7 @@
       "typeVersion": 2.3,
       "position": [
         448,
-        -96
+        -64
       ],
       "id": "f97f8b2d-b695-40dc-a68c-932656a3f91e",
       "name": "If"
@@ -69,17 +69,15 @@
         "operation": "append",
         "documentId": {
           "__rl": true,
-          "value": "1Y_6QA1lVL328EFL0FbNGLYwH8fufBoWkJXG_nkXv7pA",
+          "value": "YOUR_GOOGLE_SHEET_ID",
           "mode": "list",
-          "cachedResultName": "Automated Business Leads",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Y_6QA1lVL328EFL0FbNGLYwH8fufBoWkJXG_nkXv7pA/edit?usp=drivesdk"
+          "cachedResultName": "Automated Business Leads"
         },
         "sheetName": {
           "__rl": true,
           "value": "gid=0",
           "mode": "list",
-          "cachedResultName": "Sheet1",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Y_6QA1lVL328EFL0FbNGLYwH8fufBoWkJXG_nkXv7pA/edit#gid=0"
+          "cachedResultName": "Sheet1"
         },
         "columns": {
           "mappingMode": "defineBelow",
@@ -177,20 +175,14 @@
       "typeVersion": 4.7,
       "position": [
         672,
-        -96
+        -64
       ],
       "id": "788b97bd-83c0-41f5-ad80-e6e7f69df091",
-      "name": "Append row in sheet",
-      "credentials": {
-        "googleSheetsOAuth2Api": {
-          "id": "FMfTJRPN3CfoxGae",
-          "name": "Google Sheets account"
-        }
-      }
+      "name": "Append row in sheet"
     },
     {
       "parameters": {
-        "chatId": "0000000000",
+        "chatId": "YOUR_TELEGRAM_CHAT_ID",
         "text": "=🚨 NEW BUSINESS LEAD\n\n👤 {{ $json.name }}\n🏢 {{ $json.business }}\n\n📧 {{ $json.email }}\n📱 {{ $json.phone }}\n\n💼 {{ $json.service }}\n💰 Rp{{ Number($json.budget).toLocaleString('id-ID') }}\n\n📌 {{ $json.status }}\n🕐 {{ new Date($json.created_at).toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' }) }}",
         "additionalFields": {
           "appendAttribution": false
@@ -199,18 +191,29 @@
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        896,
-        -96
+        672,
+        -256
       ],
       "id": "47218a62-1830-4bc1-abf3-f5bd7df6a3af",
-      "name": "Send a text message",
-      "webhookId": "8c2d8b8e-0f40-44fc-8891-e24a9c4472a8",
-      "credentials": {
-        "telegramApi": {
-          "id": "3mYasKGKR9EwVqkv",
-          "name": "Telegram account"
+      "name": "Send a text message"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.email }}",
+        "subject": "=Terima kasih telah menghubungi kami — {{ $json.business }}",
+        "message": "=<!DOCTYPE html>\n<html>\n<body style=\"font-family: Arial, sans-serif; line-height: 1.6; color: #333;\">\n\n<h2>🚨 Lead Request Received</h2>\n\n<p>Halo <strong>{{ $json.name }}</strong>,</p>\n\n<p>\nTerima kasih telah menghubungi kami terkait kebutuhan\n<strong>{{ $json.service }}</strong> untuk\n<strong>{{ $json.business }}</strong>.\n</p>\n\n<p>Permintaan Anda sudah berhasil kami terima.</p>\n\n<h3>Detail Permintaan</h3>\n\n<table style=\"border-collapse: collapse;\">\n<tr>\n<td style=\"padding: 6px 15px 6px 0;\"><strong>Nama</strong></td>\n<td style=\"padding: 6px;\">{{ $json.name }}</td>\n</tr>\n<tr>\n<td style=\"padding: 6px 15px 6px 0;\"><strong>Bisnis</strong></td>\n<td style=\"padding: 6px;\">{{ $json.business }}</td>\n</tr>\n<tr>\n<td style=\"padding: 6px 15px 6px 0;\"><strong>Layanan</strong></td>\n<td style=\"padding: 6px;\">{{ $json.service }}</td>\n</tr>\n<tr>\n<td style=\"padding: 6px 15px 6px 0;\"><strong>Estimasi Budget</strong></td>\n<td style=\"padding: 6px;\">Rp{{ Number($json.budget).toLocaleString('id-ID') }}</td>\n</tr>\n</table>\n\n<p>\nTim kami akan meninjau permintaan Anda dan menghubungi Anda\nkembali untuk membahas kebutuhan lebih lanjut.\n</p>\n\n<p>Terima kasih telah menghubungi kami.</p>\n\n<p>\nSalam,<br>\n<strong>Business Lead Team</strong>\n</p>\n\n</body>\n</html>",
+        "options": {
+          "appendAttribution": false
         }
-      }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        672,
+        128
+      ],
+      "id": "f21eed68-95ad-401d-9432-0800b35dbdde",
+      "name": "Send a message"
     }
   ],
   "pinData": {},
@@ -244,19 +247,33 @@
             "node": "Append row in sheet",
             "type": "main",
             "index": 0
-          }
-        ]
-      ]
-    },
-    "Append row in sheet": {
-      "main": [
-        [
+          },
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          },
           {
             "node": "Send a text message",
             "type": "main",
             "index": 0
           }
         ]
+      ]
+    },
+    "Append row in sheet": {
+      "main": [
+        []
+      ]
+    },
+    "Send a text message": {
+      "main": [
+        []
+      ]
+    },
+    "Send a message": {
+      "main": [
+        []
       ]
     }
   },
@@ -266,12 +283,5 @@
     "binaryMode": "separate",
     "availableInMCP": false
   },
-  "versionId": "cb89c290-f52d-4585-b458-2bb3ec45ce1d",
-  "meta": {
-    "templateCredsSetupCompleted": true,
-    "instanceId": "1427014a05222cf37ad74b5e7780f1117196c30639dffdbfe62c4fe7f9a4fa06"
-  },
-  "nodeGroups": [],
-  "id": "BWXYjStdKGztlJLb",
   "tags": []
 }

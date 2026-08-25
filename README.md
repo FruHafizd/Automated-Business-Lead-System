@@ -2,11 +2,11 @@
 
 An automated lead capture and management workflow built with **n8n** and **Google Sheets**.
 
-This project demonstrates how incoming business leads can be collected through a webhook, validated, transformed into a standardized format, and automatically stored in Google Sheets.
+This project demonstrates how incoming business leads can be collected through a webhook, validated, transformed into a standardized format, stored in Google Sheets, and automatically processed through Telegram and Gmail notifications.
 
 ## Current Version
 
-**v0.1.0 — MVP**
+**v0.3.0 — Email Automation**
 
 ## Workflow
 
@@ -18,24 +18,33 @@ Client
 Webhook
   │
   ▼
-Code
+Code in JavaScript
   │
   │ Normalize lead data
   ▼
 IF
   │
   │ Email exists?
+  │
   ├───────────────┐
   │ YES           │ NO
   ▼               ▼
-Google Sheets    Stop
-  │
-  ▼
-Telegram
-  │
-  ▼
-Lead Notification
+ ┌──────────────────────────────┐
+ │                              │
+ ▼              ▼               ▼
+Google Sheets   Telegram        Gmail
+ │              │               │
+ ▼              ▼               ▼
+Store Lead      Notification    Confirmation
 ```
+
+When a valid email address is provided, the workflow sends the lead data to three independent destinations:
+
+- **Google Sheets** — stores the lead
+- **Telegram** — sends a real-time notification
+- **Gmail** — sends a confirmation email to the lead
+
+If the email field is empty, the `IF` node stops the lead from being processed.
 
 ## Features
 
@@ -46,7 +55,9 @@ Lead Notification
 - Automatically generate a creation timestamp
 - Store valid leads in Google Sheets
 - Send real-time Telegram notifications for new leads
-- Format lead information into a readable notification
+- Format lead information into a readable Telegram notification
+- Send automated confirmation emails to leads
+- Format email content using HTML
 - Display budget in Indonesian Rupiah format
 - Display localized creation timestamps
 
@@ -80,7 +91,9 @@ Send an HTTP `POST` request to the webhook:
 
 ## Example Result
 
-After validation and processing, the lead is stored as:
+After processing, the lead is stored and notifications are sent automatically.
+
+### Google Sheets
 
 ```text
 name       → Andi Pratama
@@ -92,6 +105,34 @@ budget     → 3000000
 status     → NEW
 created_at → 2026-08-25T...
 ```
+
+### Telegram
+
+```text
+🚨 NEW BUSINESS LEAD
+
+👤 Andi Pratama
+🏢 Toko Andi
+
+📧 andi@example.com
+📱 08123456789
+
+💼 Website
+💰 Rp3.000.000
+
+📌 NEW
+🕐 25 Agu 2026, 02.00
+```
+
+### Email
+
+The lead automatically receives a confirmation email containing:
+
+- Lead name
+- Business name
+- Requested service
+- Estimated budget
+- Confirmation that the request has been received
 
 ## Google Sheets Structure
 
@@ -107,18 +148,22 @@ The Google Sheet should contain the following columns:
 - Google Sheets
 - Google Sheets API
 - Google Drive API
+- Gmail API
+- Telegram Bot
 
 ## Setup
 
 ### 1. Import the Workflow
 
-Import:
+Import the sanitized workflow template:
 
 ```text
-workflows/automated-business-lead-system.json
+workflows/automated-business-lead-system.template.json
 ```
 
 into your n8n instance.
+
+> **Note:** The repository contains a sanitized workflow template. You must configure your own credentials, Google Sheet, Telegram bot, and Gmail account.
 
 ### 2. Configure Google Sheets
 
@@ -139,15 +184,33 @@ created_at
 
 Create a Google Sheets OAuth credential in n8n and connect it to your Google account.
 
-### 4. Select Your Spreadsheet
+Select your own Google Sheet in the Google Sheets node.
 
-Open the **Google Sheets** node and select your own spreadsheet and worksheet.
+### 4. Configure Telegram
 
-### 5. Configure the Webhook
+Create a Telegram bot using BotFather.
+
+Configure the Telegram credential in n8n and provide your own Telegram chat ID.
+
+The template does not contain the original chat ID.
+
+### 5. Configure Gmail
+
+Create a Gmail OAuth credential in n8n.
+
+Connect your own Gmail account and authorize the required Gmail permissions.
+
+The Gmail node sends the confirmation email to:
+
+```text
+{{ $json.email }}
+```
+
+### 6. Configure the Webhook
 
 The workflow expects an HTTP `POST` request containing lead information.
 
-### 6. Test the Workflow
+### 7. Test the Workflow
 
 Example using PowerShell:
 
@@ -166,7 +229,15 @@ Invoke-RestMethod `
   }'
 ```
 
-### 7. Activate the Workflow
+### 8. Verify the Result
+
+A successful request should:
+
+1. Store the lead in Google Sheets
+2. Send a Telegram notification
+3. Send a confirmation email to the lead
+
+### 9. Activate the Workflow
 
 After successful testing, activate the n8n workflow and use the production webhook URL.
 
@@ -176,7 +247,7 @@ After successful testing, activate the n8n workflow and use the production webho
 Automated-Business-Lead-System/
 │
 ├── workflows/
-│   └── automated-business-lead-system.json
+│   └── automated-business-lead-system.template.json
 │
 ├── .gitignore
 └── README.md
@@ -193,17 +264,23 @@ Automated-Business-Lead-System/
 - [x] Automatic lead status
 - [x] Automatic timestamp
 
-### v0.2.0 — Notifications
+### v0.2.0 — Telegram Notifications
 
 - [x] Telegram lead notifications
 - [x] New lead alerts
 - [x] Lead summary messages
+- [x] Formatted Telegram messages
+- [x] Indonesian Rupiah budget formatting
+- [x] Localized timestamp formatting
 
 ### v0.3.0 — Email Automation
 
-- [ ] Automatic email notification
-- [ ] Lead confirmation email
-- [ ] Follow-up email workflow
+- [x] Automatic email notification
+- [x] Lead confirmation email
+- [x] HTML email template
+- [x] Dynamic lead information
+- [x] Indonesian Rupiah budget formatting
+- [x] Personalized confirmation message
 
 ### v0.4.0 — Lead Scoring
 
@@ -244,7 +321,7 @@ Automated-Business-Lead-System/
 
 Initial MVP release.
 
-Implemented the core lead capture pipeline:
+Implemented:
 
 - HTTP webhook
 - JavaScript data transformation
@@ -265,14 +342,34 @@ Implemented:
 - Indonesian Rupiah budget formatting
 - Localized timestamp formatting
 
+### v0.3.0 — 2026-08-25
+
+Added automated Gmail confirmation emails for new leads.
+
+Implemented:
+
+- Gmail OAuth integration
+- Automatic lead confirmation emails
+- HTML email template
+- Dynamic lead information
+- Indonesian Rupiah budget formatting
+- Personalized confirmation message
 
 ## Security Notice
 
-This repository does not contain Google OAuth client secrets, access tokens, API keys, passwords, or other private credentials.
+This repository does not contain:
 
-When importing the workflow, configure your own credentials and Google Sheets document.
+- Google OAuth client secrets
+- Access tokens
+- API keys
+- Passwords
+- Telegram bot tokens
+- Private Google Sheet IDs
+- Private Telegram chat IDs
 
----
+The workflow template uses placeholder values where necessary.
+
+When importing the workflow, configure your own credentials and services.
 
 ## Author
 
