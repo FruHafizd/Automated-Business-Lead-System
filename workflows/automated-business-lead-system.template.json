@@ -27,8 +27,34 @@
         224,
         -64
       ],
-      "id": "bee492cc-8b20-437e-9626-7abdc3d154d71",
+      "id": "bee492cc-8b20-4373-be84-abdc3d154d71",
       "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "jsCode": "const lead = $json;\n\nconst errors = [];\n\n// Required fields\nif (!lead.name || String(lead.name).trim() === \"\") {\n  errors.push(\"name is required\");\n}\n\nif (!lead.email || String(lead.email).trim() === \"\") {\n  errors.push(\"email is required\");\n}\n\nif (!lead.business || String(lead.business).trim() === \"\") {\n  errors.push(\"business is required\");\n}\n\nif (!lead.service || String(lead.service).trim() === \"\") {\n  errors.push(\"service is required\");\n}\n\n// Email format\nconst emailRegex = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;\n\nif (lead.email && !emailRegex.test(String(lead.email).trim())) {\n  errors.push(\"invalid email format\");\n}\n\n// Phone validation\nconst phone = String(lead.phone || \"\").replace(/\\D/g, \"\");\n\nif (phone.length < 10 || phone.length > 15) {\n  errors.push(\"invalid phone number\");\n}\n\n// Budget validation\nconst budget = Number(lead.budget);\n\nif (!Number.isFinite(budget) || budget < 0) {\n  errors.push(\"invalid budget\");\n}\n\nreturn [\n  {\n    json: {\n      ...lead,\n      is_valid: errors.length === 0,\n      validation_errors: errors\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        448,
+        -64
+      ],
+      "id": "8c34881a-a7d4-473f-b5f4-4421eb076889",
+      "name": "Validate Lead"
+    },
+    {
+      "parameters": {
+        "jsCode": "const lead = $json;\n\nlet score = 0;\nconst scoring_reasons = [];\n\n// =========================\n// BUDGET SCORE\n// =========================\n\nconst budget = Number(lead.budget);\n\nif (budget >= 10000000) {\n  score += 40;\n  scoring_reasons.push(\"High budget\");\n} else if (budget >= 5000000) {\n  score += 30;\n  scoring_reasons.push(\"Medium-high budget\");\n} else if (budget >= 2000000) {\n  score += 20;\n  scoring_reasons.push(\"Medium budget\");\n} else if (budget >= 1000000) {\n  score += 10;\n  scoring_reasons.push(\"Low-medium budget\");\n}\n\n// =========================\n// SERVICE SCORE\n// =========================\n\nconst service = String(lead.service || \"\").toLowerCase();\n\nconst highValueServices = [\n  \"website\",\n  \"web development\",\n  \"web app\",\n  \"application\",\n  \"mobile app\",\n  \"ecommerce\"\n];\n\nif (highValueServices.some(item => service.includes(item))) {\n  score += 20;\n  scoring_reasons.push(\"High-value service\");\n} else if (service) {\n  score += 10;\n  scoring_reasons.push(\"Service provided\");\n}\n\n// =========================\n// BUSINESS INFORMATION\n// =========================\n\nif (lead.business && String(lead.business).trim().length >= 3) {\n  score += 15;\n  scoring_reasons.push(\"Business information provided\");\n}\n\n// =========================\n// CONTACT INFORMATION\n// =========================\n\nif (lead.email) {\n  score += 10;\n  scoring_reasons.push(\"Email provided\");\n}\n\nif (lead.phone) {\n  score += 5;\n  scoring_reasons.push(\"Phone provided\");\n}\n\n// =========================\n// LEAD CLASSIFICATION\n// =========================\n\nlet priority;\n\nif (score >= 70) {\n  priority = \"HIGH\";\n} else if (score >= 40) {\n  priority = \"MEDIUM\";\n} else {\n  priority = \"LOW\";\n}\n\nreturn [\n  {\n    json: {\n      ...lead,\n      score,\n      priority,\n      scoring_reasons\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        672,
+        -64
+      ],
+      "id": "a68966e9-867d-4503-8e42-97851ceb2f49",
+      "name": "Lead Scoring"
     },
     {
       "parameters": {
@@ -42,11 +68,11 @@
           "conditions": [
             {
               "id": "26b850ba-d92d-4483-85bc-2c00c7126a6e",
-              "leftValue": "={{ $json.email }}",
+              "leftValue": "={{ $json.is_valid }}",
               "rightValue": "",
               "operator": {
-                "type": "string",
-                "operation": "notEmpty",
+                "type": "boolean",
+                "operation": "true",
                 "singleValue": true
               }
             }
@@ -58,7 +84,7 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        448,
+        896,
         -64
       ],
       "id": "f97f8b2d-b695-40dc-a68c-932656a3f91e",
@@ -89,82 +115,24 @@
             "service": "={{ $json.service }}",
             "budget": "={{ $json.budget }}",
             "status": "={{ $json.status }}",
-            "created_at": "={{ $json.created_at }}"
+            "created_at": "={{ $json.created_at }}",
+            "score": "={{ $json.score }}",
+            "priority": "={{ $json.priority }}",
+            "scoring_reasons": "={{ $json.scoring_reasons.join(\", \") }}"
           },
           "matchingColumns": [],
           "schema": [
-            {
-              "id": "name",
-              "displayName": "name",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "email",
-              "displayName": "email",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "phone",
-              "displayName": "phone",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "business",
-              "displayName": "business",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "service",
-              "displayName": "service",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "budget",
-              "displayName": "budget",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "status",
-              "displayName": "status",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "created_at",
-              "displayName": "created_at",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            }
+            { "id": "name", "displayName": "name", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true },
+            { "id": "email", "displayName": "email", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true },
+            { "id": "phone", "displayName": "phone", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true },
+            { "id": "business", "displayName": "business", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true },
+            { "id": "service", "displayName": "service", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true },
+            { "id": "budget", "displayName": "budget", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true },
+            { "id": "status", "displayName": "status", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true },
+            { "id": "score", "displayName": "score", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true },
+            { "id": "priority", "displayName": "priority", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true },
+            { "id": "scoring_reasons", "displayName": "scoring_reasons", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true },
+            { "id": "created_at", "displayName": "created_at", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true }
           ],
           "attemptToConvertTypes": false,
           "convertFieldsToString": false
@@ -174,7 +142,7 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        672,
+        1120,
         -64
       ],
       "id": "788b97bd-83c0-41f5-ad80-e6e7f69df091",
@@ -183,7 +151,7 @@
     {
       "parameters": {
         "chatId": "YOUR_TELEGRAM_CHAT_ID",
-        "text": "=🚨 NEW BUSINESS LEAD\n\n👤 {{ $json.name }}\n🏢 {{ $json.business }}\n\n📧 {{ $json.email }}\n📱 {{ $json.phone }}\n\n💼 {{ $json.service }}\n💰 Rp{{ Number($json.budget).toLocaleString('id-ID') }}\n\n📌 {{ $json.status }}\n🕐 {{ new Date($json.created_at).toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' }) }}",
+        "text": "=🚨 NEW BUSINESS LEAD\n\n👤 {{ $json.name }}\n🏢 {{ $json.business }}\n\n📧 {{ $json.email }}\n📱 {{ $json.phone }}\n\n💼 {{ $json.service }}\n💰 Rp{{ Number($json.budget).toLocaleString('id-ID') }}\n\n📊 Score: {{ $json.score }}/100\n🔥 Priority: {{ $json.priority }}\n\n📌 {{ $json.status }}\n🕐 {{ new Date($json.created_at).toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' }) }}",
         "additionalFields": {
           "appendAttribution": false
         }
@@ -191,17 +159,18 @@
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        672,
+        1120,
         -256
       ],
       "id": "47218a62-1830-4bc1-abf3-f5bd7df6a3af",
-      "name": "Send a text message"
+      "name": "Send a text message",
+      "webhookId": "8c2d8b8e-0f40-44fc-8891-e24a9c4472a8"
     },
     {
       "parameters": {
         "sendTo": "={{ $json.email }}",
         "subject": "=Terima kasih telah menghubungi kami — {{ $json.business }}",
-        "message": "=<!DOCTYPE html>\n<html>\n<body style=\"font-family: Arial, sans-serif; line-height: 1.6; color: #333;\">\n\n<h2>🚨 Lead Request Received</h2>\n\n<p>Halo <strong>{{ $json.name }}</strong>,</p>\n\n<p>\nTerima kasih telah menghubungi kami terkait kebutuhan\n<strong>{{ $json.service }}</strong> untuk\n<strong>{{ $json.business }}</strong>.\n</p>\n\n<p>Permintaan Anda sudah berhasil kami terima.</p>\n\n<h3>Detail Permintaan</h3>\n\n<table style=\"border-collapse: collapse;\">\n<tr>\n<td style=\"padding: 6px 15px 6px 0;\"><strong>Nama</strong></td>\n<td style=\"padding: 6px;\">{{ $json.name }}</td>\n</tr>\n<tr>\n<td style=\"padding: 6px 15px 6px 0;\"><strong>Bisnis</strong></td>\n<td style=\"padding: 6px;\">{{ $json.business }}</td>\n</tr>\n<tr>\n<td style=\"padding: 6px 15px 6px 0;\"><strong>Layanan</strong></td>\n<td style=\"padding: 6px;\">{{ $json.service }}</td>\n</tr>\n<tr>\n<td style=\"padding: 6px 15px 6px 0;\"><strong>Estimasi Budget</strong></td>\n<td style=\"padding: 6px;\">Rp{{ Number($json.budget).toLocaleString('id-ID') }}</td>\n</tr>\n</table>\n\n<p>\nTim kami akan meninjau permintaan Anda dan menghubungi Anda\nkembali untuk membahas kebutuhan lebih lanjut.\n</p>\n\n<p>Terima kasih telah menghubungi kami.</p>\n\n<p>\nSalam,<br>\n<strong>Business Lead Team</strong>\n</p>\n\n</body>\n</html>",
+        "message": "=<!DOCTYPE html>\n<html>\n<body style=\"font-family: Arial, sans-serif; line-height: 1.6; color: #333;\">\n\n  <h2>🚨 Lead Request Received</h2>\n\n  <p>Halo <strong>{{ $json.name }}</strong>,</p>\n\n  <p>\n    Terima kasih telah menghubungi kami terkait kebutuhan\n    <strong>{{ $json.service }}</strong> untuk\n    <strong>{{ $json.business }}</strong>.\n  </p>\n\n  <p>Permintaan Anda sudah berhasil kami terima.</p>\n\n  <h3>Detail Permintaan</h3>\n\n  <table style=\"border-collapse: collapse;\">\n    <tr>\n      <td style=\"padding: 6px 15px 6px 0;\"><strong>Nama</strong></td>\n      <td style=\"padding: 6px;\">{{ $json.name }}</td>\n    </tr>\n    <tr>\n      <td style=\"padding: 6px 15px 6px 0;\"><strong>Bisnis</strong></td>\n      <td style=\"padding: 6px;\">{{ $json.business }}</td>\n    </tr>\n    <tr>\n      <td style=\"padding: 6px 15px 6px 0;\"><strong>Layanan</strong></td>\n      <td style=\"padding: 6px;\">{{ $json.service }}</td>\n    </tr>\n    <tr>\n      <td style=\"padding: 6px 15px 6px 0;\"><strong>Estimasi Budget</strong></td>\n      <td style=\"padding: 6px;\">\n        Rp{{ Number($json.budget).toLocaleString('id-ID') }}\n      </td>\n    </tr>\n  </table>\n\n  <p>\n    Tim kami akan meninjau permintaan Anda dan menghubungi Anda\n    kembali untuk membahas kebutuhan lebih lanjut.\n  </p>\n\n  <p>Terima kasih telah menghubungi kami.</p>\n\n  <p>\n    Salam,<br>\n    <strong>Business Lead Team</strong>\n  </p>\n\n</body>\n</html>",
         "options": {
           "appendAttribution": false
         }
@@ -209,11 +178,12 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.2,
       "position": [
-        672,
+        1120,
         128
       ],
       "id": "f21eed68-95ad-401d-9432-0800b35dbdde",
-      "name": "Send a message"
+      "name": "Send a message",
+      "webhookId": "54e04535-dbaa-4ece-81f4-6410e363a304"
     }
   ],
   "pinData": {},
@@ -221,43 +191,37 @@
     "Webhook": {
       "main": [
         [
-          {
-            "node": "Code in JavaScript",
-            "type": "main",
-            "index": 0
-          }
+          { "node": "Code in JavaScript", "type": "main", "index": 0 }
         ]
       ]
     },
     "Code in JavaScript": {
       "main": [
         [
-          {
-            "node": "If",
-            "type": "main",
-            "index": 0
-          }
+          { "node": "Validate Lead", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Validate Lead": {
+      "main": [
+        [
+          { "node": "Lead Scoring", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Lead Scoring": {
+      "main": [
+        [
+          { "node": "If", "type": "main", "index": 0 }
         ]
       ]
     },
     "If": {
       "main": [
         [
-          {
-            "node": "Append row in sheet",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "Send a message",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "Send a text message",
-            "type": "main",
-            "index": 0
-          }
+          { "node": "Append row in sheet", "type": "main", "index": 0 },
+          { "node": "Send a message", "type": "main", "index": 0 },
+          { "node": "Send a text message", "type": "main", "index": 0 }
         ]
       ]
     },

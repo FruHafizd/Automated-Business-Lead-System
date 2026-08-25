@@ -6,7 +6,7 @@ This project demonstrates how incoming business leads can be collected through a
 
 ## Current Version
 
-**v0.3.0 — Email Automation**
+**v0.4.0 — Lead Scoring**
 
 ## Workflow
 
@@ -284,9 +284,11 @@ Automated-Business-Lead-System/
 
 ### v0.4.0 — Lead Scoring
 
-- [ ] Budget-based scoring
-- [ ] Service-based scoring
-- [ ] Lead priority classification
+- [x] Budget-based scoring
+- [x] Service-based scoring
+- [x] Lead priority classification
+- [x] Lead score stored in Google Sheets
+- [x] Lead score displayed in Telegram
 
 ### v0.5.0 — Reliability
 
@@ -354,6 +356,21 @@ Implemented:
 - Dynamic lead information
 - Indonesian Rupiah budget formatting
 - Personalized confirmation message
+
+### v0.4.0 — 2026-08-26
+
+Added lead scoring and priority classification.
+
+Implemented:
+
+- Budget-based lead scoring
+- Service-based lead scoring
+- Business information scoring
+- Contact information scoring
+- Automatic lead score calculation
+- HIGH / MEDIUM / LOW priority classification
+- Lead score stored in Google Sheets
+- Lead score displayed in Telegram notifications
 
 ## Security Notice
 
