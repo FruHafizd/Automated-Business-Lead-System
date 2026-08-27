@@ -1,6 +1,330 @@
 {
-  "name": "Automated Business Lead System - Template",
+  "name": "Automated Business Lead System",
   "nodes": [
+    {
+      "parameters": {
+        "jsCode": "const item = $json;\n\nconst retryCount = Number(item.retry_count ?? 0) + 1;\n\nreturn [{\n  json: {\n    ...item,\n    retry_count: retryCount\n  },\n  pairedItem: { item: 0 }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1120,
+        48
+      ],
+      "id": "ea9f32df-bdc4-4651-aebd-5ee8bf004340",
+      "name": "Retry Counter - Telegram"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "2ed81722-9e39-4c75-8bd7-e445f93f0bd3",
+              "leftValue": "={{ $json.retry_count }}",
+              "rightValue": 3,
+              "operator": {
+                "type": "number",
+                "operation": "lt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1344,
+        48
+      ],
+      "id": "91c6ba7b-6894-4a58-b975-1ee1427107ba",
+      "name": "If - Telegram Retry"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1568,
+        48
+      ],
+      "id": "aa7414a8-8dbf-4491-ae5f-e65df8d64609",
+      "name": "Wait - Telegram Retry",
+      "webhookId": "8a1a818e-7014-47c9-8758-37fb0726e7eb"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "YOUR_ERROR_LOG_SPREADSHEET_ID",
+          "mode": "list",
+          "cachedResultName": "Automated Business Error Logs",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_ERROR_LOG_SPREADSHEET_ID/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 470282172,
+          "mode": "list",
+          "cachedResultName": "Log Retry Failure",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_ERROR_LOG_SPREADSHEET_ID/edit#gid=470282172"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "timestamp": "={{ new Date().toISOString() }}",
+            "service": "Telegram",
+            "name": "={{ $('Lead Scoring').item.json.name }}",
+            "email": "={{ $('Lead Scoring').item.json.email }}",
+            "retry_count": "={{ $json.retry_count }}",
+            "error": "={{ $json.error?.message || $json.error?.description || $json.error || 'Telegram API error' }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "timestamp",
+              "displayName": "timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "service",
+              "displayName": "service",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "email",
+              "displayName": "email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "retry_count",
+              "displayName": "retry_count",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "error",
+              "displayName": "error",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1568,
+        240
+      ],
+      "id": "9ca041a1-1673-44b6-9d9b-b35a4d73a6c2",
+      "name": "Log Retry Failure - Telegram"
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $json;\n\nconst retryCount = Number(item.retry_count ?? 0) + 1;\n\nreturn [{\n  json: {\n    ...item,\n    retry_count: retryCount\n  },\n  pairedItem: { item: 0 }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1120,
+        912
+      ],
+      "id": "d2bd5c64-207c-401e-8fe2-5c645c05d33a",
+      "name": "Retry Counter - Gmail"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "eb4f659e-beaf-4980-a64e-f3879221a46b",
+              "leftValue": "={{ $json.retry_count }}",
+              "rightValue": 3,
+              "operator": {
+                "type": "number",
+                "operation": "lt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1344,
+        912
+      ],
+      "id": "c12ad061-c73e-4051-9c1e-0481af72e68a",
+      "name": "If - Gmail Retry"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1568,
+        912
+      ],
+      "id": "4b6eb4d4-8e03-4eb3-ba4c-57092f81d482",
+      "name": "Wait - Gmail Retry",
+      "webhookId": "63b00cf3-3c31-4005-91fc-eb486bc7d145"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "YOUR_ERROR_LOG_SPREADSHEET_ID",
+          "mode": "list",
+          "cachedResultName": "Automated Business Error Logs",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_ERROR_LOG_SPREADSHEET_ID/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 470282172,
+          "mode": "list",
+          "cachedResultName": "Log Retry Failure",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_ERROR_LOG_SPREADSHEET_ID/edit#gid=470282172"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "timestamp": "={{ new Date().toISOString() }}",
+            "service": "Gmail",
+            "name": "={{ $('Lead Scoring').item.json.name }}",
+            "email": "={{ $('Lead Scoring').item.json.email }}",
+            "retry_count": "={{ $json.retry_count }}",
+            "error": "={{ $json.error?.message || $json.error?.description || $json.error || 'Gmail authentication error' }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "timestamp",
+              "displayName": "timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "service",
+              "displayName": "service",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "email",
+              "displayName": "email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "retry_count",
+              "displayName": "retry_count",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "error",
+              "displayName": "error",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1568,
+        1104
+      ],
+      "id": "9f08da93-409a-4a33-8b33-76e9ae3d3869",
+      "name": "Log Retry Failure - Gmail"
+    },
     {
       "parameters": {
         "httpMethod": "POST",
@@ -10,51 +334,25 @@
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2.1,
       "position": [
-        0,
-        -64
+        -224,
+        768
       ],
-      "id": "83bd8561-9a7f-427e-9626-7ab25cebc7ac",
+      "id": "376c7c18-ec6e-44c2-9770-f1deb3e70e18",
       "name": "Webhook",
       "webhookId": "cbacd034-1021-4b3b-9917-246b9d93e059"
     },
     {
       "parameters": {
-        "jsCode": "const lead = $json.body;\n\nreturn [\n  {\n    json: {\n      name: lead.name,\n      email: lead.email,\n      phone: lead.phone,\n      business: lead.business,\n      service: lead.service,\n      budget: lead.budget,\n      status: \"NEW\",\n      created_at: new Date().toISOString()\n    }\n  }\n];"
+        "jsCode": "const lead = $json.body;\nreturn [\n  {\n    json: {\n      name: lead.name,\n      email: lead.email,\n      phone: lead.phone,\n      business: lead.business,\n      service: lead.service,\n      budget: lead.budget,\n      status: \"NEW\",\n      created_at: new Date().toISOString()\n    }\n  }\n];"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        224,
-        -64
+        0,
+        768
       ],
-      "id": "bee492cc-8b20-4373-be84-abdc3d154d71",
+      "id": "e8fcf397-f2a3-4b2d-8aa9-48658b38b86d",
       "name": "Code in JavaScript"
-    },
-    {
-      "parameters": {
-        "jsCode": "const lead = $json;\n\nconst errors = [];\n\n// Required fields\nif (!lead.name || String(lead.name).trim() === \"\") {\n  errors.push(\"name is required\");\n}\n\nif (!lead.email || String(lead.email).trim() === \"\") {\n  errors.push(\"email is required\");\n}\n\nif (!lead.business || String(lead.business).trim() === \"\") {\n  errors.push(\"business is required\");\n}\n\nif (!lead.service || String(lead.service).trim() === \"\") {\n  errors.push(\"service is required\");\n}\n\n// Email format\nconst emailRegex = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;\n\nif (lead.email && !emailRegex.test(String(lead.email).trim())) {\n  errors.push(\"invalid email format\");\n}\n\n// Phone validation\nconst phone = String(lead.phone || \"\").replace(/\\D/g, \"\");\n\nif (phone.length < 10 || phone.length > 15) {\n  errors.push(\"invalid phone number\");\n}\n\n// Budget validation\nconst budget = Number(lead.budget);\n\nif (!Number.isFinite(budget) || budget < 0) {\n  errors.push(\"invalid budget\");\n}\n\nreturn [\n  {\n    json: {\n      ...lead,\n      is_valid: errors.length === 0,\n      validation_errors: errors\n    }\n  }\n];"
-      },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        448,
-        -64
-      ],
-      "id": "8c34881a-a7d4-473f-b5f4-4421eb076889",
-      "name": "Validate Lead"
-    },
-    {
-      "parameters": {
-        "jsCode": "const lead = $json;\n\nlet score = 0;\nconst scoring_reasons = [];\n\n// =========================\n// BUDGET SCORE\n// =========================\n\nconst budget = Number(lead.budget);\n\nif (budget >= 10000000) {\n  score += 40;\n  scoring_reasons.push(\"High budget\");\n} else if (budget >= 5000000) {\n  score += 30;\n  scoring_reasons.push(\"Medium-high budget\");\n} else if (budget >= 2000000) {\n  score += 20;\n  scoring_reasons.push(\"Medium budget\");\n} else if (budget >= 1000000) {\n  score += 10;\n  scoring_reasons.push(\"Low-medium budget\");\n}\n\n// =========================\n// SERVICE SCORE\n// =========================\n\nconst service = String(lead.service || \"\").toLowerCase();\n\nconst highValueServices = [\n  \"website\",\n  \"web development\",\n  \"web app\",\n  \"application\",\n  \"mobile app\",\n  \"ecommerce\"\n];\n\nif (highValueServices.some(item => service.includes(item))) {\n  score += 20;\n  scoring_reasons.push(\"High-value service\");\n} else if (service) {\n  score += 10;\n  scoring_reasons.push(\"Service provided\");\n}\n\n// =========================\n// BUSINESS INFORMATION\n// =========================\n\nif (lead.business && String(lead.business).trim().length >= 3) {\n  score += 15;\n  scoring_reasons.push(\"Business information provided\");\n}\n\n// =========================\n// CONTACT INFORMATION\n// =========================\n\nif (lead.email) {\n  score += 10;\n  scoring_reasons.push(\"Email provided\");\n}\n\nif (lead.phone) {\n  score += 5;\n  scoring_reasons.push(\"Phone provided\");\n}\n\n// =========================\n// LEAD CLASSIFICATION\n// =========================\n\nlet priority;\n\nif (score >= 70) {\n  priority = \"HIGH\";\n} else if (score >= 40) {\n  priority = \"MEDIUM\";\n} else {\n  priority = \"LOW\";\n}\n\nreturn [\n  {\n    json: {\n      ...lead,\n      score,\n      priority,\n      scoring_reasons\n    }\n  }\n];"
-      },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        672,
-        -64
-      ],
-      "id": "a68966e9-867d-4503-8e42-97851ceb2f49",
-      "name": "Lead Scoring"
     },
     {
       "parameters": {
@@ -84,10 +382,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        896,
-        -64
+        672,
+        768
       ],
-      "id": "f97f8b2d-b695-40dc-a68c-932656a3f91e",
+      "id": "eb144291-29c1-4b77-8abb-8636a51b5dc4",
       "name": "If"
     },
     {
@@ -95,15 +393,17 @@
         "operation": "append",
         "documentId": {
           "__rl": true,
-          "value": "YOUR_GOOGLE_SHEET_ID",
+          "value": "YOUR_LEADS_SPREADSHEET_ID",
           "mode": "list",
-          "cachedResultName": "Automated Business Leads"
+          "cachedResultName": "Automated Business Leads",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_LEADS_SPREADSHEET_ID/edit?usp=drivesdk"
         },
         "sheetName": {
           "__rl": true,
           "value": "gid=0",
           "mode": "list",
-          "cachedResultName": "Sheet1"
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_LEADS_SPREADSHEET_ID/edit#gid=0"
         },
         "columns": {
           "mappingMode": "defineBelow",
@@ -122,17 +422,312 @@
           },
           "matchingColumns": [],
           "schema": [
-            { "id": "name", "displayName": "name", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true },
-            { "id": "email", "displayName": "email", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true },
-            { "id": "phone", "displayName": "phone", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true },
-            { "id": "business", "displayName": "business", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true },
-            { "id": "service", "displayName": "service", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true },
-            { "id": "budget", "displayName": "budget", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true },
-            { "id": "status", "displayName": "status", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true },
-            { "id": "score", "displayName": "score", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true },
-            { "id": "priority", "displayName": "priority", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true },
-            { "id": "scoring_reasons", "displayName": "scoring_reasons", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true },
-            { "id": "created_at", "displayName": "created_at", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true }
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "email",
+              "displayName": "email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "phone",
+              "displayName": "phone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "business",
+              "displayName": "business",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "service",
+              "displayName": "service",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "budget",
+              "displayName": "budget",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "score",
+              "displayName": "score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "priority",
+              "displayName": "priority",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "scoring_reasons",
+              "displayName": "scoring_reasons",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "created_at",
+              "displayName": "created_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        896,
+        560
+      ],
+      "id": "6f098da2-5da9-4c75-b592-f852cf279dcc",
+      "name": "Append row in sheet",
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "chatId": "YOUR_TELEGRAM_CHAT_ID",
+        "text": "=\ud83d\udea8 NEW BUSINESS LEAD\n\n\ud83d\udc64 {{ $json.name }}\n\ud83c\udfe2 {{ $json.business }}\n\n\ud83d\udce7 {{ $json.email }}\n\ud83d\udcf1 {{ $json.phone }}\n\n\ud83d\udcbc {{ $json.service }}\n\ud83d\udcb0 Rp{{ Number($json.budget).toLocaleString('id-ID') }}\n\n\ud83d\udcca Score: {{ $json.score }}/100\n\ud83d\udd25 Priority: {{ $json.priority }}\n\n\ud83d\udccc {{ $json.status }}\n\ud83d\udd50 {{ new Date($json.created_at).toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' }) }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        896,
+        128
+      ],
+      "id": "c0bf5a79-a8b8-4596-a61e-cfa6a75a4b88",
+      "name": "Send a text message",
+      "webhookId": "8c2d8b8e-0f40-44fc-8891-e24a9c4472a8",
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.email }}",
+        "subject": "=Terima kasih telah menghubungi kami \u2014 {{ $json.business }}",
+        "message": "=<!DOCTYPE html>\n<html>\n<body style=\"font-family: Arial, sans-serif; line-height: 1.6; color: #333;\">\n\n  <h2>\ud83d\udea8 Lead Request Received</h2>\n\n  <p>Halo <strong>{{ $json.name }}</strong>,</p>\n\n  <p>\n    Terima kasih telah menghubungi kami terkait kebutuhan\n    <strong>{{ $json.service }}</strong> untuk\n    <strong>{{ $json.business }}</strong>.\n  </p>\n\n  <p>Permintaan Anda sudah berhasil kami terima.</p>\n\n  <h3>Detail Permintaan</h3>\n\n  <table style=\"border-collapse: collapse;\">\n    <tr>\n      <td style=\"padding: 6px 15px 6px 0;\"><strong>Nama</strong></td>\n      <td style=\"padding: 6px;\">{{ $json.name }}</td>\n    </tr>\n    <tr>\n      <td style=\"padding: 6px 15px 6px 0;\"><strong>Bisnis</strong></td>\n      <td style=\"padding: 6px;\">{{ $json.business }}</td>\n    </tr>\n    <tr>\n      <td style=\"padding: 6px 15px 6px 0;\"><strong>Layanan</strong></td>\n      <td style=\"padding: 6px;\">{{ $json.service }}</td>\n    </tr>\n    <tr>\n      <td style=\"padding: 6px 15px 6px 0;\"><strong>Estimasi Budget</strong></td>\n      <td style=\"padding: 6px;\">\n        Rp{{ Number($json.budget).toLocaleString('id-ID') }}\n      </td>\n    </tr>\n  </table>\n\n  <p>\n    Tim kami akan meninjau permintaan Anda dan menghubungi Anda\n    kembali untuk membahas kebutuhan lebih lanjut.\n  </p>\n\n  <p>Terima kasih telah menghubungi kami.</p>\n\n  <p>\n    Salam,<br>\n    <strong>Business Lead Team</strong>\n  </p>\n\n</body>\n</html>",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        896,
+        992
+      ],
+      "id": "7c8d4a75-453f-4c7e-b724-1825b19fb560",
+      "name": "Send a message",
+      "webhookId": "54e04535-dbaa-4ece-81f4-6410e363a304",
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const lead = $json;\n\nconst errors = [];\n\nif (!lead.name || String(lead.name).trim() === \"\") {\n  errors.push(\"name is required\");\n}\n\nif (!lead.email || String(lead.email).trim() === \"\") {\n  errors.push(\"email is required\");\n}\n\nif (!lead.business || String(lead.business).trim() === \"\") {\n  errors.push(\"business is required\");\n}\n\nif (!lead.service || String(lead.service).trim() === \"\") {\n  errors.push(\"service is required\");\n}\n\nconst emailRegex = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;\n\nif (lead.email && !emailRegex.test(String(lead.email).trim())) {\n  errors.push(\"invalid email format\");\n}\n\nconst phone = String(lead.phone || \"\").replace(/\\D/g, \"\");\n\nif (phone.length < 10 || phone.length > 15) {\n  errors.push(\"invalid phone number\");\n}\n\nconst budget = Number(lead.budget);\n\nif (!Number.isFinite(budget) || budget < 0) {\n  errors.push(\"invalid budget\");\n}\n\nreturn [\n  {\n    json: {\n      ...lead,\n      is_valid: errors.length === 0,\n      validation_errors: errors,\n      status: errors.length === 0 ? \"NEW\" : \"INVALID\"\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        224,
+        768
+      ],
+      "id": "3ca3be13-70ce-408b-a562-fe8f46fc9bf9",
+      "name": "Validate Lead"
+    },
+    {
+      "parameters": {
+        "jsCode": "const lead = $json;\n\nlet score = 0;\nconst scoring_reasons = [];\n\n// =========================\n// BUDGET SCORE\n// =========================\n\nconst budget = Number(lead.budget);\n\nif (budget >= 10000000) {\n  score += 40;\n  scoring_reasons.push(\"High budget\");\n} else if (budget >= 5000000) {\n  score += 30;\n  scoring_reasons.push(\"Medium-high budget\");\n} else if (budget >= 2000000) {\n  score += 20;\n  scoring_reasons.push(\"Medium budget\");\n} else if (budget >= 1000000) {\n  score += 10;\n  scoring_reasons.push(\"Low-medium budget\");\n}\n\n// =========================\n// SERVICE SCORE\n// =========================\n\nconst service = String(lead.service || \"\").toLowerCase();\n\nconst highValueServices = [\n  \"website\",\n  \"web development\",\n  \"web app\",\n  \"application\",\n  \"mobile app\",\n  \"ecommerce\"\n];\n\nif (highValueServices.some(item => service.includes(item))) {\n  score += 20;\n  scoring_reasons.push(\"High-value service\");\n} else if (service) {\n  score += 10;\n  scoring_reasons.push(\"Service provided\");\n}\n\n// =========================\n// BUSINESS INFORMATION\n// =========================\n\nif (lead.business && String(lead.business).trim().length >= 3) {\n  score += 15;\n  scoring_reasons.push(\"Business information provided\");\n}\n\n// =========================\n// CONTACT INFORMATION\n// =========================\n\nif (lead.email) {\n  score += 10;\n  scoring_reasons.push(\"Email provided\");\n}\n\nif (lead.phone) {\n  score += 5;\n  scoring_reasons.push(\"Phone provided\");\n}\n\n// =========================\n// LEAD CLASSIFICATION\n// =========================\n\nlet priority;\n\nif (score >= 70) {\n  priority = \"HIGH\";\n} else if (score >= 40) {\n  priority = \"MEDIUM\";\n} else {\n  priority = \"LOW\";\n}\n\nreturn [\n  {\n    json: {\n      ...lead,\n      score,\n      priority,\n      scoring_reasons\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        448,
+        768
+      ],
+      "id": "d5d0b12a-a578-4e4d-af3e-c6c7229aace2",
+      "name": "Lead Scoring"
+    },
+    {
+      "parameters": {
+        "jsCode": "const lead = $json;\n\nreturn [\n  {\n    json: {\n      name: lead.name || \"Unknown\",\n      email: lead.email || \"\",\n      phone: lead.phone || \"\",\n      business: lead.business || \"\",\n      service: lead.service || \"\",\n      budget: lead.budget ?? 0,\n      status: \"INVALID\",\n      created_at: lead.created_at,\n      validation_errors: lead.validation_errors || [],\n      error_message: (lead.validation_errors || []).join(\", \")\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        896,
+        1296
+      ],
+      "id": "86a478ee-d9b5-4e0f-969a-d246c47009bd",
+      "name": "Handle Invalid Lead"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "YOUR_LEADS_SPREADSHEET_ID",
+          "mode": "list",
+          "cachedResultName": "Automated Business Leads",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_LEADS_SPREADSHEET_ID/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 273595739,
+          "mode": "list",
+          "cachedResultName": "Invalid Leads",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_LEADS_SPREADSHEET_ID/edit#gid=273595739"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "name": "={{ $json.name }}",
+            "email": "={{ $json.email }}",
+            "phone": "={{ $json.phone }}",
+            "business": "={{ $json.business }}",
+            "service": "={{ $json.service }}",
+            "budget": "={{ $json.budget }}",
+            "status": "={{ $json.status }}",
+            "created_at": "={{ $json.created_at }}",
+            "validation_errors": "={{ $json.validation_errors.join(\", \") }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "email",
+              "displayName": "email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "phone",
+              "displayName": "phone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "business",
+              "displayName": "business",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "service",
+              "displayName": "service",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "budget",
+              "displayName": "budget",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "created_at",
+              "displayName": "created_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "validation_errors",
+              "displayName": "validation_errors",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
           ],
           "attemptToConvertTypes": false,
           "convertFieldsToString": false
@@ -143,109 +738,430 @@
       "typeVersion": 4.7,
       "position": [
         1120,
-        -64
+        1296
       ],
-      "id": "788b97bd-83c0-41f5-ad80-e6e7f69df091",
-      "name": "Append row in sheet"
+      "id": "b5a12f04-5e52-4921-a6ad-4445ec2f47ae",
+      "name": "Log Invalid Lead"
     },
     {
       "parameters": {
-        "chatId": "YOUR_TELEGRAM_CHAT_ID",
-        "text": "=🚨 NEW BUSINESS LEAD\n\n👤 {{ $json.name }}\n🏢 {{ $json.business }}\n\n📧 {{ $json.email }}\n📱 {{ $json.phone }}\n\n💼 {{ $json.service }}\n💰 Rp{{ Number($json.budget).toLocaleString('id-ID') }}\n\n📊 Score: {{ $json.score }}/100\n🔥 Priority: {{ $json.priority }}\n\n📌 {{ $json.status }}\n🕐 {{ new Date($json.created_at).toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' }) }}",
-        "additionalFields": {
-          "appendAttribution": false
-        }
+        "jsCode": "const item = $json;\n\nconst retryCount = Number(item.retry_count ?? 0) + 1;\n\nreturn [{\n  json: {\n    ...item,\n    retry_count: retryCount\n  },\n  pairedItem: { item: 0 }\n}];"
       },
-      "type": "n8n-nodes-base.telegram",
-      "typeVersion": 1.2,
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
       "position": [
         1120,
-        -256
+        480
       ],
-      "id": "47218a62-1830-4bc1-abf3-f5bd7df6a3af",
-      "name": "Send a text message",
-      "webhookId": "8c2d8b8e-0f40-44fc-8891-e24a9c4472a8"
+      "id": "17fde903-bc40-413f-9bf4-dc66e010c432",
+      "name": "Retry Counter"
     },
     {
       "parameters": {
-        "sendTo": "={{ $json.email }}",
-        "subject": "=Terima kasih telah menghubungi kami — {{ $json.business }}",
-        "message": "=<!DOCTYPE html>\n<html>\n<body style=\"font-family: Arial, sans-serif; line-height: 1.6; color: #333;\">\n\n  <h2>🚨 Lead Request Received</h2>\n\n  <p>Halo <strong>{{ $json.name }}</strong>,</p>\n\n  <p>\n    Terima kasih telah menghubungi kami terkait kebutuhan\n    <strong>{{ $json.service }}</strong> untuk\n    <strong>{{ $json.business }}</strong>.\n  </p>\n\n  <p>Permintaan Anda sudah berhasil kami terima.</p>\n\n  <h3>Detail Permintaan</h3>\n\n  <table style=\"border-collapse: collapse;\">\n    <tr>\n      <td style=\"padding: 6px 15px 6px 0;\"><strong>Nama</strong></td>\n      <td style=\"padding: 6px;\">{{ $json.name }}</td>\n    </tr>\n    <tr>\n      <td style=\"padding: 6px 15px 6px 0;\"><strong>Bisnis</strong></td>\n      <td style=\"padding: 6px;\">{{ $json.business }}</td>\n    </tr>\n    <tr>\n      <td style=\"padding: 6px 15px 6px 0;\"><strong>Layanan</strong></td>\n      <td style=\"padding: 6px;\">{{ $json.service }}</td>\n    </tr>\n    <tr>\n      <td style=\"padding: 6px 15px 6px 0;\"><strong>Estimasi Budget</strong></td>\n      <td style=\"padding: 6px;\">\n        Rp{{ Number($json.budget).toLocaleString('id-ID') }}\n      </td>\n    </tr>\n  </table>\n\n  <p>\n    Tim kami akan meninjau permintaan Anda dan menghubungi Anda\n    kembali untuk membahas kebutuhan lebih lanjut.\n  </p>\n\n  <p>Terima kasih telah menghubungi kami.</p>\n\n  <p>\n    Salam,<br>\n    <strong>Business Lead Team</strong>\n  </p>\n\n</body>\n</html>",
-        "options": {
-          "appendAttribution": false
-        }
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "8f6e5ee0-5c31-47bf-94c1-2b810425ed86",
+              "leftValue": "={{ $json.retry_count }}",
+              "rightValue": 3,
+              "operator": {
+                "type": "number",
+                "operation": "lt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
       },
-      "type": "n8n-nodes-base.gmail",
-      "typeVersion": 2.2,
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
       "position": [
-        1120,
-        128
+        1344,
+        480
       ],
-      "id": "f21eed68-95ad-401d-9432-0800b35dbdde",
-      "name": "Send a message",
-      "webhookId": "54e04535-dbaa-4ece-81f4-6410e363a304"
+      "id": "4c5f10d6-2d48-45c5-af8b-1905bab2506f",
+      "name": "If4"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1568,
+        480
+      ],
+      "id": "96b855ca-95ae-4e93-8c29-e2a11ee7f1f0",
+      "name": "Wait",
+      "webhookId": "3c083df2-20ea-4a37-8e5d-f06617fc3002"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "YOUR_ERROR_LOG_SPREADSHEET_ID",
+          "mode": "list",
+          "cachedResultName": "Automated Business Error Logs",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_ERROR_LOG_SPREADSHEET_ID/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 470282172,
+          "mode": "list",
+          "cachedResultName": "Log Retry Failure",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_ERROR_LOG_SPREADSHEET_ID/edit#gid=470282172"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "timestamp": "={{ new Date().toISOString() }}",
+            "name": "={{ $json.name }}",
+            "email": "={{ $json.email }}",
+            "retry_count": "={{ $json.retry_count }}",
+            "error": "={{ $json.error?.message || $json.error?.description || $json.error || 'Unknown error' }}",
+            "service": "=Sheets"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "timestamp",
+              "displayName": "timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "service",
+              "displayName": "service",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "email",
+              "displayName": "email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "retry_count",
+              "displayName": "retry_count",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "error",
+              "displayName": "error",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1568,
+        672
+      ],
+      "id": "bbb0f1ed-2b82-4e95-880d-b442655671d8",
+      "name": "Log Retry Failure"
     }
   ],
   "pinData": {},
   "connections": {
+    "Retry Counter - Telegram": {
+      "main": [
+        [
+          {
+            "node": "If - Telegram Retry",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If - Telegram Retry": {
+      "main": [
+        [
+          {
+            "node": "Wait - Telegram Retry",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Log Retry Failure - Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait - Telegram Retry": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Retry Counter - Gmail": {
+      "main": [
+        [
+          {
+            "node": "If - Gmail Retry",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If - Gmail Retry": {
+      "main": [
+        [
+          {
+            "node": "Wait - Gmail Retry",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Log Retry Failure - Gmail",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait - Gmail Retry": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
     "Webhook": {
       "main": [
         [
-          { "node": "Code in JavaScript", "type": "main", "index": 0 }
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
         ]
       ]
     },
     "Code in JavaScript": {
       "main": [
         [
-          { "node": "Validate Lead", "type": "main", "index": 0 }
-        ]
-      ]
-    },
-    "Validate Lead": {
-      "main": [
-        [
-          { "node": "Lead Scoring", "type": "main", "index": 0 }
-        ]
-      ]
-    },
-    "Lead Scoring": {
-      "main": [
-        [
-          { "node": "If", "type": "main", "index": 0 }
+          {
+            "node": "Validate Lead",
+            "type": "main",
+            "index": 0
+          }
         ]
       ]
     },
     "If": {
       "main": [
         [
-          { "node": "Append row in sheet", "type": "main", "index": 0 },
-          { "node": "Send a message", "type": "main", "index": 0 },
-          { "node": "Send a text message", "type": "main", "index": 0 }
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Handle Invalid Lead",
+            "type": "main",
+            "index": 0
+          }
         ]
       ]
     },
     "Append row in sheet": {
       "main": [
-        []
+        [],
+        [
+          {
+            "node": "Retry Counter",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "Send a text message": {
       "main": [
-        []
+        [],
+        [
+          {
+            "node": "Retry Counter - Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "Send a message": {
       "main": [
-        []
+        [],
+        [
+          {
+            "node": "Retry Counter - Gmail",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate Lead": {
+      "main": [
+        [
+          {
+            "node": "Lead Scoring",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Lead Scoring": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Handle Invalid Lead": {
+      "main": [
+        [
+          {
+            "node": "Log Invalid Lead",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Retry Counter": {
+      "main": [
+        [
+          {
+            "node": "If4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If4": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Log Retry Failure",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     }
   },
-  "active": false,
+  "active": true,
   "settings": {
     "executionOrder": "v1",
     "binaryMode": "separate",
-    "availableInMCP": false
+    "availableInMCP": false,
+    "timeSavedMode": "fixed",
+    "callerPolicy": "workflowsFromSameOwner",
+    "timezone": "Asia/Kuala_Lumpur"
   },
+  "versionId": "9bc2437b-642a-47ab-9afa-834804bbd20a",
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "nodeGroups": [],
+  "id": "BWXYjStdKGztlJLb",
   "tags": []
 }
