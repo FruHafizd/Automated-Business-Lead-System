@@ -1,6 +1,6 @@
 # Automated Business Lead System
 
-An automated business lead capture, validation, scoring, notification, and reliability workflow built with **n8n**, **Google Sheets**, **Telegram**, and **Gmail**.
+An automated business lead capture, validation, scoring, notification, reliability, and security workflow built with **n8n**, **Google Sheets**, **Telegram**, and **Gmail**.
 
 This project demonstrates how incoming business leads can be automatically collected through a webhook, normalized, validated, scored, classified by priority, stored in Google Sheets, and distributed through Telegram and Gmail.
 
@@ -8,7 +8,7 @@ The workflow also includes invalid lead handling, error logging, and independent
 
 ## Current Version
 
-**v0.5.0 — Reliability**
+**v0.6.0 — Security**
 
 ---
 
@@ -35,6 +35,7 @@ The workflow also includes invalid lead handling, error logging, and independent
 ## Features
 
 * Receive business leads through an HTTP `POST` webhook
+* **Webhook authentication using Header Auth** (Bearer token)
 * Normalize incoming lead data using JavaScript
 * Validate required lead information (email format, phone number, project budget, etc.)
 * Automatically assign lead status and creation timestamp
@@ -45,6 +46,7 @@ The workflow also includes invalid lead handling, error logging, and independent
 * Independent retry mechanism for Google Sheets, Telegram, and Gmail operations (max 3 attempts with wait time)
 * Log permanent service failures
 * Format budget values as Indonesian Rupiah and display localized timestamps
+* **Secure credential management** — secrets stored in n8n credential system, not in workflow JSON
 
 ---
 
@@ -63,38 +65,44 @@ The workflow also includes invalid lead handling, error logging, and independent
 ```text
 Client
   │
-  │ HTTP POST
+  │ HTTP POST + Authorization: Bearer TOKEN
   ▼
-Webhook
+Webhook (Header Auth)
   │
-  ▼
-Code in JavaScript
+  │ Authentication Check
   │
-  │ Normalize lead data
-  ▼
-Validate Lead
+  ├── INVALID TOKEN → 401 Unauthorized (workflow NOT executed)
   │
-  ▼
-Lead Scoring
-  │
-  ▼
-IF — Valid Lead?
-  │
-  ├── TRUE
-  │    │
-  │    ├── Google Sheets (Error → Retry up to 3x → Failure Log)
-  │    │
-  │    ├── Telegram (Error → Retry up to 3x → Failure Log)
-  │    │
-  │    └── Gmail (Error → Retry up to 3x → Failure Log)
-  │
-  └── FALSE
+  └── VALID TOKEN
        │
        ▼
-  Handle Invalid Lead
+  Code in JavaScript
+       │
+       │ Normalize lead data
+       ▼
+  Validate Lead
        │
        ▼
-  Log Invalid Lead
+  Lead Scoring
+       │
+       ▼
+  IF — Valid Lead?
+       │
+       ├── TRUE
+       │    │
+       │    ├── Google Sheets (Error → Retry up to 3x → Failure Log)
+       │    │
+       │    ├── Telegram (Error → Retry up to 3x → Failure Log)
+       │    │
+       │    └── Gmail (Error → Retry up to 3x → Failure Log)
+       │
+       └── FALSE
+            │
+            ▼
+       Handle Invalid Lead
+            │
+            ▼
+       Log Invalid Lead
 ```
 
 ### Valid Lead Flow
@@ -142,9 +150,29 @@ Create a Telegram bot using BotFather. Configure the Telegram credential in n8n 
 
 Create a Gmail OAuth credential in n8n. Connect your own Gmail account and authorize the required permissions. The confirmation email is sent to `{{ $json.email }}`.
 
-### 6. Activate the Workflow
+### 6. Configure Webhook Authentication
 
-After configuring the Webhook and successful testing, activate the n8n workflow and use the production webhook URL.
+The webhook is protected using n8n Header Auth.
+
+Create a Header Auth credential in n8n:
+
+- **Name:** `Authorization`
+- **Value:** `Bearer YOUR_SECRET_TOKEN`
+- **Allowed HTTP Request Domains:** Leave empty unless required.
+
+Attach the credential to the Webhook node:
+
+`Webhook → Authentication → Header Auth`
+
+Use your own secret token. Never commit the token to GitHub or include it in the workflow template.
+
+The production webhook requires the following HTTP header:
+
+Authorization: Bearer YOUR_SECRET_TOKEN
+
+### 7. Activate the Workflow
+
+After configuring the Webhook authentication and successfully testing the workflow, activate the n8n workflow and use the production webhook URL.
 
 ---
 
@@ -158,6 +186,9 @@ Send an HTTP `POST` request to the webhook using PowerShell:
 Invoke-RestMethod `
   -Uri "YOUR_N8N_WEBHOOK_URL" `
   -Method POST `
+  -Headers @{
+      Authorization = "Bearer YOUR_SECRET"
+  } `
   -ContentType "application/json" `
   -Body '{
     "name": "Andi Pratama",
@@ -180,8 +211,8 @@ business        → Toko Andi
 service         → Website
 budget          → 3000000
 status          → NEW
-score           → 65
-priority        → MEDIUM
+score           → 70
+priority        → HIGH
 created_at      → 2026-08-28T...
 ```
 
@@ -198,8 +229,8 @@ created_at      → 2026-08-28T...
 💼 Website
 💰 Rp3.000.000
 
-📊 Score: 65/100
-🔥 Priority: MEDIUM
+📊 Score: 70/100
+🔥 Priority: HIGH
 
 📌 NEW
 🕐 28 Agu 2026, 02.00
@@ -260,6 +291,21 @@ Permanent service failures are recorded with:
 
 ---
 
+## Security Testing
+
+The v0.6.0 security layer was tested against the following scenarios:
+
+| Test | Scenario | Expected Result |
+| --- | --- | --- |
+| TEST 1 | Valid authentication | 200 OK — lead processed |
+| TEST 2 | Missing authentication | 401 Unauthorized |
+| TEST 3 | Wrong token | 401 Unauthorized |
+| TEST 4 | Malformed Authorization header | 401 Unauthorized |
+| TEST 5 | Valid token + invalid lead | Validation and invalid lead handling |
+| TEST 6 | Valid token + service failure | Retry mechanism remains functional |
+
+Security testing confirmed that webhook authentication does not interfere with the existing v0.5.0 validation, scoring, notification, retry, and error logging features.
+
 ## Data Structure
 
 ### Lead Data
@@ -311,8 +357,19 @@ Automated-Business-Lead-System/
 ### v0.5.0 — Reliability (Completed)
 * Error handling, Invalid lead handling, Max 3 retry attempts (Google Sheets, Telegram, Gmail), Independent retry handling, Retry failure logging.
 
+### v0.6.0 — Security (Completed)
+
+* Webhook authentication using Header Auth
+* Bearer token protection
+* Unauthorized requests rejected with HTTP 401
+* Valid authentication tested successfully
+* Invalid authentication scenarios tested
+* Credential secrets stored in n8n credential system
+* Sanitized workflow template for repository distribution
+* Security testing for valid, missing, wrong, and malformed authentication
+* Compatibility testing with v0.5.0 reliability features
+
 ### Upcoming Versions
-* **v0.6.0 — Security:** Environment config, Webhook protection, Request authentication.
 * **v0.7.0 — Lead Management:** Duplicate detection, Lead lifecycle, Follow-up reminders.
 * **v0.8.0 — Analytics:** Conversion metrics, Priority/Budget distribution.
 * **v0.9.0 — Production Preparation:** End-to-end testing, Documentation, Portfolio screenshots.
@@ -321,7 +378,7 @@ Automated-Business-Lead-System/
 ---
 
 ## Version History
-
+* **v0.6.0 — 2026-08-29:** Added webhook authentication, Bearer token protection, credential security, and security testing.
 * **v0.5.0 — 2026-08-28:** Added reliability and error recovery mechanisms (retries, invalid lead handling, failure logs).
 * **v0.4.0 — 2026-08-26:** Added lead scoring and priority classification.
 * **v0.3.0 — 2026-08-25:** Added automated Gmail confirmation emails.
@@ -332,9 +389,22 @@ Automated-Business-Lead-System/
 
 ## Security Notice
 
-This repository does not contain Google OAuth client secrets, access tokens, API keys, passwords, Telegram bot tokens, Private Google Sheet IDs, or Private Telegram chat IDs.
+This repository does not contain:
 
-The workflow template uses placeholder values where necessary. Never commit credentials, API keys, access tokens, bot tokens, or other secrets to the repository.
+- Google OAuth client secrets
+- Access tokens
+- API keys
+- Passwords
+- Telegram bot tokens
+- Private Google Sheet IDs
+- Private Telegram chat IDs
+- Webhook authentication secrets
+
+The workflow template uses placeholder values where necessary.
+
+All credentials and secrets must be configured directly in n8n's credential system and must never be committed to the repository.
+
+If a secret is accidentally exposed, revoke or rotate it immediately.
 
 ---
 
