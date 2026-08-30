@@ -8,10 +8,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        848,
-        -1328
+        -304,
+        864
       ],
-      "id": "40ed0eb5-c8c6-47e5-8bcf-1586c0cc1e72",
+      "id": "05bc7f81-a309-4944-95bd-6556f647c79c",
       "name": "Retry Counter - Telegram",
       "notes": " [BUGFIX v0.7.1: original code read Number(item.retry_count ?? 0)+1, but the upstream node's error output does not reliably carry retry_count forward across the retry loop, so the counter reset to 1 every pass and the 3-attempt cap never engaged. Now self-references this node's own previous run via $('Retry Counter - Telegram') so the count survives even when the failing node's error output loses context.]"
     },
@@ -42,10 +42,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        1072,
-        -1328
+        -80,
+        864
       ],
-      "id": "48770220-d641-466f-a285-2f3829c82923",
+      "id": "3f6b80c2-558c-4df8-9830-3ebb3e94687e",
       "name": "If - Telegram Retry"
     },
     {
@@ -53,10 +53,10 @@
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
       "position": [
-        1296,
-        -1312
+        144,
+        880
       ],
-      "id": "e5daf46e-64cb-498b-997b-b4b6d5205b5d",
+      "id": "3493b6d9-9fbb-404f-953c-e1e1f6ceaa2c",
       "name": "Wait - Telegram Retry",
       "webhookId": "8a1a818e-7014-47c9-8758-37fb0726e7eb"
     },
@@ -65,17 +65,17 @@
         "operation": "append",
         "documentId": {
           "__rl": true,
-          "value": "YOUR_ERROR_LOG_SPREADSHEET_ID",
+          "value": "YOUR_ERROR_LOGS_SPREADSHEET_ID",
           "mode": "list",
           "cachedResultName": "Automated Business Error Logs",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_ERROR_LOG_SPREADSHEET_ID/edit?usp=drivesdk"
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_ERROR_LOGS_SPREADSHEET_ID/edit?usp=drivesdk"
         },
         "sheetName": {
           "__rl": true,
           "value": 470282172,
           "mode": "list",
           "cachedResultName": "Log Retry Failure",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_ERROR_LOG_SPREADSHEET_ID/edit#gid=470282172"
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_ERROR_LOGS_SPREADSHEET_ID/edit#gid=470282172"
         },
         "columns": {
           "mappingMode": "defineBelow",
@@ -158,11 +158,17 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        1296,
-        -1120
+        144,
+        1072
       ],
-      "id": "78064f1f-d513-4b39-a455-e1a0c56ef060",
-      "name": "Log Retry Failure - Telegram"
+      "id": "53baa44f-3645-4612-98e2-fd9f1e6552a3",
+      "name": "Log Retry Failure - Telegram",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "YOUR_GOOGLE_SHEETS_CREDENTIAL_ID",
+          "name": "Google Sheets account"
+        }
+      }
     },
     {
       "parameters": {
@@ -171,10 +177,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        848,
-        -464
+        -304,
+        1728
       ],
-      "id": "3bbcf59e-d5ca-4b82-a775-2533ba445a99",
+      "id": "b51d761a-7d65-4007-ac12-4715bf8cb997",
       "name": "Retry Counter - Gmail",
       "notes": " [BUGFIX v0.7.1: original code read Number(item.retry_count ?? 0)+1, but the upstream node's error output does not reliably carry retry_count forward across the retry loop, so the counter reset to 1 every pass and the 3-attempt cap never engaged. Now self-references this node's own previous run via $('Retry Counter - Gmail') so the count survives even when the failing node's error output loses context.]"
     },
@@ -205,10 +211,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        1072,
-        -464
+        -80,
+        1728
       ],
-      "id": "6e1823f8-d1f3-4eb9-9ab8-80db9e9d3c2b",
+      "id": "fb4fb4e5-7d3c-43f0-834d-dfd06a79add3",
       "name": "If - Gmail Retry"
     },
     {
@@ -216,10 +222,10 @@
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
       "position": [
-        1296,
-        -496
+        144,
+        1696
       ],
-      "id": "b974a8d4-f411-46d9-9e9b-eebf0ced9204",
+      "id": "f86939cd-0d59-4dab-8a75-ac35c53c8cd1",
       "name": "Wait - Gmail Retry",
       "webhookId": "63b00cf3-3c31-4005-91fc-eb486bc7d145"
     },
@@ -228,17 +234,17 @@
         "operation": "append",
         "documentId": {
           "__rl": true,
-          "value": "YOUR_ERROR_LOG_SPREADSHEET_ID",
+          "value": "YOUR_ERROR_LOGS_SPREADSHEET_ID",
           "mode": "list",
           "cachedResultName": "Automated Business Error Logs",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_ERROR_LOG_SPREADSHEET_ID/edit?usp=drivesdk"
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_ERROR_LOGS_SPREADSHEET_ID/edit?usp=drivesdk"
         },
         "sheetName": {
           "__rl": true,
           "value": 470282172,
           "mode": "list",
           "cachedResultName": "Log Retry Failure",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_ERROR_LOG_SPREADSHEET_ID/edit#gid=470282172"
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_ERROR_LOGS_SPREADSHEET_ID/edit#gid=470282172"
         },
         "columns": {
           "mappingMode": "defineBelow",
@@ -321,11 +327,17 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        1296,
-        -304
+        144,
+        1888
       ],
-      "id": "0cc0a937-3083-4dbd-b63c-75064092f629",
-      "name": "Log Retry Failure - Gmail"
+      "id": "10e4dc04-11ea-4f6d-be3d-4a5864612226",
+      "name": "Log Retry Failure - Gmail",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "YOUR_GOOGLE_SHEETS_CREDENTIAL_ID",
+          "name": "Google Sheets account"
+        }
+      }
     },
     {
       "parameters": {
@@ -337,12 +349,18 @@
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2.1,
       "position": [
-        -1392,
-        -1312
+        -2544,
+        880
       ],
-      "id": "2195c593-6b46-4733-b52b-c137dbabb134",
+      "id": "9f0ff075-1a3e-4127-9042-6679bf572e42",
       "name": "Webhook",
-      "webhookId": "cbacd034-1021-4b3b-9917-246b9d93e059"
+      "webhookId": "cbacd034-1021-4b3b-9917-246b9d93e059",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "YOUR_HEADER_AUTH_CREDENTIAL_ID",
+          "name": "Header Auth account"
+        }
+      }
     },
     {
       "parameters": {
@@ -351,10 +369,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -1168,
-        -1312
+        -2320,
+        880
       ],
-      "id": "2911d021-b40c-4314-aaf5-af8e63f8d0bf",
+      "id": "63a2cc8c-77ea-4000-9244-2028fe146f47",
       "name": "Code in JavaScript"
     },
     {
@@ -385,10 +403,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        -496,
-        -1312
+        -1648,
+        880
       ],
-      "id": "b0c81aed-3df3-476e-be9b-7c88ffb618c5",
+      "id": "2b291ec9-9b75-4785-af77-4981a3d54755",
       "name": "If"
     },
     {
@@ -588,11 +606,17 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        624,
-        -832
+        -528,
+        1360
       ],
-      "id": "c53caf89-c19a-4231-9b25-208543c1383e",
+      "id": "c6373d1a-c608-42d1-b5d0-5a304056448f",
       "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "YOUR_GOOGLE_SHEETS_CREDENTIAL_ID",
+          "name": "Google Sheets account"
+        }
+      },
       "onError": "continueErrorOutput"
     },
     {
@@ -606,12 +630,18 @@
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        624,
-        -1264
+        -528,
+        928
       ],
-      "id": "96414670-ef78-4376-9444-ce843d2aa9db",
+      "id": "984145c0-3a46-499e-ab18-b21c2af9d372",
       "name": "Send a text message",
       "webhookId": "8c2d8b8e-0f40-44fc-8891-e24a9c4472a8",
+      "credentials": {
+        "telegramApi": {
+          "id": "YOUR_TELEGRAM_CREDENTIAL_ID",
+          "name": "Telegram account"
+        }
+      },
       "onError": "continueErrorOutput"
     },
     {
@@ -626,12 +656,18 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.2,
       "position": [
-        624,
-        -400
+        -528,
+        1792
       ],
-      "id": "71fba455-f426-49ab-a8bf-88ebe1f7f8ff",
+      "id": "f60b2a25-13cd-4504-86df-7e6ed4e42b06",
       "name": "Send a message",
       "webhookId": "54e04535-dbaa-4ece-81f4-6410e363a304",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "YOUR_GMAIL_CREDENTIAL_ID",
+          "name": "Gmail account"
+        }
+      },
       "onError": "continueErrorOutput"
     },
     {
@@ -641,10 +677,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -944,
-        -1312
+        -2096,
+        880
       ],
-      "id": "9380b24e-9708-4cf2-b3c4-6b1ecab3f021",
+      "id": "18f6066e-c48e-4774-85ff-002a21c1b735",
       "name": "Validate Lead"
     },
     {
@@ -654,10 +690,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -720,
-        -1312
+        -1872,
+        880
       ],
-      "id": "26b35dd1-b359-4f85-be42-6f93f9dfd501",
+      "id": "e765acb1-f5c6-48f3-b0f2-5d28f2818b5c",
       "name": "Lead Scoring"
     },
     {
@@ -667,10 +703,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -272,
-        -1408
+        -1424,
+        784
       ],
-      "id": "8f6221ce-c932-419d-8f40-f6c0bdaf01a5",
+      "id": "261bb579-a831-42fd-a34e-48589a601fb0",
       "name": "Handle Invalid Lead"
     },
     {
@@ -795,11 +831,17 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        -48,
-        -1408
+        -1200,
+        784
       ],
-      "id": "6e37be53-3a21-4be0-8622-f9af75a9ccb3",
-      "name": "Log Invalid Lead"
+      "id": "34c0bb62-8b8e-4cd2-80ac-34df3b9fbec6",
+      "name": "Log Invalid Lead",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "YOUR_GOOGLE_SHEETS_CREDENTIAL_ID",
+          "name": "Google Sheets account"
+        }
+      }
     },
     {
       "parameters": {
@@ -808,10 +850,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        848,
-        -896
+        -304,
+        1296
       ],
-      "id": "454ce01f-47df-45d8-be9c-965c2588167a",
+      "id": "32a37ffd-9113-4ab6-95d9-28f9e53efab5",
       "name": "Retry Counter",
       "notes": " [BUGFIX v0.7.1: original code read Number(item.retry_count ?? 0)+1, but the upstream node's error output does not reliably carry retry_count forward across the retry loop, so the counter reset to 1 every pass and the 3-attempt cap never engaged. Now self-references this node's own previous run via $('Retry Counter') so the count survives even when the failing node's error output loses context.]"
     },
@@ -842,10 +884,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        1072,
-        -896
+        -80,
+        1296
       ],
-      "id": "3eb387bd-92c0-4c82-80af-6fd281c18b38",
+      "id": "5d630a59-f728-449c-acb1-7ba0b50fae6d",
       "name": "If4"
     },
     {
@@ -853,10 +895,10 @@
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
       "position": [
-        1296,
-        -896
+        144,
+        1296
       ],
-      "id": "1b21356c-9a2d-4250-9296-3f46c327b7f0",
+      "id": "914138f3-908e-4acb-a608-369726f87493",
       "name": "Wait",
       "webhookId": "3c083df2-20ea-4a37-8e5d-f06617fc3002"
     },
@@ -865,17 +907,17 @@
         "operation": "append",
         "documentId": {
           "__rl": true,
-          "value": "YOUR_ERROR_LOG_SPREADSHEET_ID",
+          "value": "YOUR_ERROR_LOGS_SPREADSHEET_ID",
           "mode": "list",
           "cachedResultName": "Automated Business Error Logs",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_ERROR_LOG_SPREADSHEET_ID/edit?usp=drivesdk"
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_ERROR_LOGS_SPREADSHEET_ID/edit?usp=drivesdk"
         },
         "sheetName": {
           "__rl": true,
           "value": 470282172,
           "mode": "list",
           "cachedResultName": "Log Retry Failure",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_ERROR_LOG_SPREADSHEET_ID/edit#gid=470282172"
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_ERROR_LOGS_SPREADSHEET_ID/edit#gid=470282172"
         },
         "columns": {
           "mappingMode": "defineBelow",
@@ -958,11 +1000,17 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        1296,
-        -704
+        144,
+        1488
       ],
-      "id": "787c805b-d2ac-4433-bf4a-b1b3e4f7b4dc",
-      "name": "Log Retry Failure"
+      "id": "71e59529-83ed-4e52-a50a-76ad13b99343",
+      "name": "Log Retry Failure",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "YOUR_GOOGLE_SHEETS_CREDENTIAL_ID",
+          "name": "Google Sheets account"
+        }
+      }
     },
     {
       "parameters": {
@@ -985,12 +1033,18 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        -272,
-        -1216
+        -1424,
+        976
       ],
-      "id": "f9660adb-8116-4765-b0ac-f08e739ccdfb",
+      "id": "c237ba1d-259a-4def-b324-09844d440e9f",
       "name": "Get All Leads (Duplicate Check)",
       "alwaysOutputData": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "YOUR_GOOGLE_SHEETS_CREDENTIAL_ID",
+          "name": "Google Sheets account"
+        }
+      },
       "notes": "NEW v0.7.0: Reads existing Sheet1 rows so Detect Duplicate can compare emails/phones. VERIFY the 'read' operation dropdown in n8n UI after import (Google Sheets node schema can vary slightly by n8n version)."
     },
     {
@@ -1000,10 +1054,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -48,
-        -1216
+        -1200,
+        976
       ],
-      "id": "e73496c0-aaf7-4883-aac8-77f4310aed7d",
+      "id": "9b7e1222-5c60-46cc-b549-9b31054b5cdb",
       "name": "Detect Duplicate",
       "notes": "NEW v0.7.0: case-insensitive email match (primary) + digits-only phone match (secondary). If 'Get All Leads (Duplicate Check)' returns zero rows (empty sheet), match stays undefined -> is_duplicate=false, so it never blocks the very first lead. [Patched: filters out the alwaysOutputData passthrough item so an empty sheet never self-matches as a duplicate.]"
     },
@@ -1035,10 +1089,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        176,
-        -1216
+        -976,
+        976
       ],
-      "id": "9a0a38e5-9b97-4fb9-adbe-a582fff752d8",
+      "id": "3c1bd005-5c01-416a-9b5a-d6b5bfd756d4",
       "name": "If Duplicate"
     },
     {
@@ -1048,10 +1102,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        400,
-        -1456
+        -752,
+        736
       ],
-      "id": "ad6444a0-978b-4e14-9552-482f984abc01",
+      "id": "5bf39023-facc-4ff0-ba12-96318ff64306",
       "name": "Handle Duplicate Lead",
       "notes": "NEW v0.7.0: does NOT append a new row to Sheet1 (prevents duplicate lead records). No Google Sheets write is wired here on purpose — Hafiz has not created a 'Duplicate Leads' tab yet, and this workflow will not invent a spreadsheet gid. Add a Google Sheets append node here later if a log is wanted."
     },
@@ -1066,12 +1120,18 @@
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        624,
-        -1456
+        -528,
+        736
       ],
-      "id": "f34bf557-9218-4760-9a35-fc6435d5a7c5",
+      "id": "a4015bbf-d130-449c-b2b0-f54972b0bb81",
       "name": "Notify Duplicate Lead",
       "webhookId": "7f3a9303-802b-4055-bd83-e1ebc2e46f49",
+      "credentials": {
+        "telegramApi": {
+          "id": "YOUR_TELEGRAM_CREDENTIAL_ID",
+          "name": "Telegram account"
+        }
+      },
       "onError": "continueRegularOutput",
       "notes": "NEW v0.7.0: best-effort notification, intentionally NOT wrapped in the retry-loop pattern (duplicate alerts are non-critical, unlike new-lead notifications)."
     },
@@ -1082,10 +1142,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        400,
-        -896
+        -752,
+        1296
       ],
-      "id": "8ab3700a-3c71-41e7-8004-444c20e6eef9",
+      "id": "89b1111f-e3be-4ccc-8a1a-609c6eb0b712",
       "name": "Generate Lead ID",
       "notes": "NEW v0.7.0: ID = LD-YYYYMMDD-XXXX (4-char random base36 suffix). Deliberately NOT a sequential counter read from Sheets — concurrent webhook calls reading 'last row + 1' from Google Sheets is a classic race condition. Random suffix trades strict sequentiality for collision-safety, which is the right trade-off for this scale."
     },
@@ -1103,10 +1163,10 @@
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.2,
       "position": [
-        -1344,
-        -800
+        -2544,
+        2752
       ],
-      "id": "da1a5ed2-ee67-4e64-ba27-6d8e54aad6c1",
+      "id": "283c904d-2663-4f85-82f5-7197767c3731",
       "name": "Follow-up Schedule Trigger",
       "notes": "NEW v0.7.0: runs once daily at 09:00 (server/n8n instance timezone). Adjust the cron expression in n8n UI if a different check frequency is wanted."
     },
@@ -1131,12 +1191,18 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        -1120,
-        -800
+        -2320,
+        2752
       ],
-      "id": "b8a8523f-f999-486b-b44f-bff99e627aa6",
+      "id": "9e1a52cd-88c6-4fe3-8851-d0c6d8d59755",
       "name": "Get Leads For Follow-up",
-      "alwaysOutputData": true
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "YOUR_GOOGLE_SHEETS_CREDENTIAL_ID",
+          "name": "Google Sheets account"
+        }
+      }
     },
     {
       "parameters": {
@@ -1145,10 +1211,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -896,
-        -800
+        -2096,
+        2752
       ],
-      "id": "08400be4-3745-42fb-be65-fc31b3ad8123",
+      "id": "3b5fdc0d-0f37-4cda-b7fd-0338a0855f29",
       "name": "Filter Due Leads",
       "notes": "NEW v0.7.0: WON/LOST/NEW are excluded by definition (not in FOLLOWUP_STATUSES). Same-day duplicate reminders are blocked via last_reminded_at."
     },
@@ -1163,12 +1229,18 @@
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        -672,
-        -800
+        -1872,
+        2752
       ],
-      "id": "b23d22d7-d5ec-431c-a161-caad706583bd",
+      "id": "aeba997f-3556-49ee-92cf-a24a300a79d2",
       "name": "Send Follow-up Reminder",
       "webhookId": "5b16d274-bb05-466e-8b8a-21ed591c2397",
+      "credentials": {
+        "telegramApi": {
+          "id": "YOUR_TELEGRAM_CREDENTIAL_ID",
+          "name": "Telegram account"
+        }
+      },
       "onError": "continueRegularOutput"
     },
     {
@@ -1191,13 +1263,174 @@
         "columns": {
           "mappingMode": "defineBelow",
           "value": {
-            "lead_id": "={{ $json.lead_id }}",
-            "last_reminded_at": "={{ new Date().toISOString() }}"
+            "lead_id": "={{ $('Filter Due Leads').item.json.lead_id }}",
+            "last_reminded_at": "={{ new Date().toISOString() }}",
+            "row_number": 0
           },
           "matchingColumns": [
             "lead_id"
           ],
-          "schema": [],
+          "schema": [
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "email",
+              "displayName": "email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "phone",
+              "displayName": "phone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "business",
+              "displayName": "business",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "service",
+              "displayName": "service",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "budget",
+              "displayName": "budget",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "score",
+              "displayName": "score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "priority",
+              "displayName": "priority",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "scoring_reasons",
+              "displayName": "scoring_reasons",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "lead_id",
+              "displayName": "lead_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "last_contacted_at",
+              "displayName": "last_contacted_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "next_follow_up_at",
+              "displayName": "next_follow_up_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "last_reminded_at",
+              "displayName": "last_reminded_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "created_at",
+              "displayName": "created_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": false
+            }
+          ],
           "attemptToConvertTypes": false,
           "convertFieldsToString": false
         },
@@ -1206,12 +1439,652 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        -448,
-        -800
+        -1648,
+        2752
       ],
-      "id": "463e44eb-f5a3-4b47-8a1f-1da32f1323db",
+      "id": "4403ab32-482b-4c1b-b9f2-ce983b960399",
       "name": "Mark Reminder Sent",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "YOUR_GOOGLE_SHEETS_CREDENTIAL_ID",
+          "name": "Google Sheets account"
+        }
+      },
       "notes": "NEW v0.7.0: matches existing row by lead_id and stamps last_reminded_at, so the same lead is not reminded twice in one day. Requires a 'last_reminded_at' column header in Sheet1 (see README changes)."
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "lead-activity",
+        "authentication": "headerAuth",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -2544,
+        2208
+      ],
+      "id": "63c89dd0-c667-451b-8269-ed9e7fab3322",
+      "name": "Webhook - Activity",
+      "webhookId": "c500de7c-322c-4f61-ae7f-e970df2cd643",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "YOUR_HEADER_AUTH_CREDENTIAL_ID",
+          "name": "Header Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const body = $json.body || {};\n\nconst ALLOWED_TYPES = [\n  \"CONTACTED\", \"REPLIED\", \"CALL\", \"MEETING\",\n  \"PROPOSAL_SENT\", \"FOLLOW_UP\", \"WON\", \"LOST\", \"NOTE\"\n];\n\nconst lead_id = String(body.lead_id || \"\").trim();\nconst activity_type = String(body.activity_type || \"\").trim().toUpperCase();\nconst channel = String(body.channel || \"\").trim();\nconst description = String(body.description || \"\").trim();\n\nconst errors = [];\n\nif (!lead_id) errors.push(\"lead_id is required\");\nif (!ALLOWED_TYPES.includes(activity_type)) {\n  errors.push(`activity_type must be one of: ${ALLOWED_TYPES.join(\", \")}`);\n}\n\nreturn [{\n  json: {\n    lead_id,\n    activity_type,\n    channel,\n    description,\n    is_valid: errors.length === 0,\n    validation_errors: errors,\n    created_at: new Date().toISOString()\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -2320,
+        2208
+      ],
+      "id": "494b6d54-1886-4021-8203-a40b7f4f20f0",
+      "name": "Normalize + Validate Activity"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "1e235fa4-4bfc-4301-9119-16e284b67378",
+              "leftValue": "={{ $json.is_valid }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -2096,
+        2208
+      ],
+      "id": "c6cd56b9-0123-47cc-b7af-0e6beb5e953f",
+      "name": "If Activity Valid"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "YOUR_LEADS_SPREADSHEET_ID",
+          "mode": "list",
+          "cachedResultName": "Automated Business Leads",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_LEADS_SPREADSHEET_ID/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_LEADS_SPREADSHEET_ID/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -1872,
+        2208
+      ],
+      "id": "17947093-2d97-4596-82a6-041f4ce49d87",
+      "name": "Get All Leads (Find by ID)",
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "YOUR_GOOGLE_SHEETS_CREDENTIAL_ID",
+          "name": "Google Sheets account"
+        }
+      },
+      "notes": "NEW v0.8.0: reads Sheet1 so Find Lead can match the incoming activity's lead_id against the master lead list."
+    },
+    {
+      "parameters": {
+        "jsCode": "const targetLeadId = $('Normalize + Validate Activity').item.json.lead_id;\n\nconst rows = $input.all().map(i => i.json).filter(r => r.lead_id);\nconst match = rows.find(r => String(r.lead_id).trim() === targetLeadId);\n\nconst activity = $('Normalize + Validate Activity').item.json;\n\nreturn [{\n  json: {\n    ...activity,\n    lead_found: Boolean(match),\n    lead_name: match ? match.name : null,\n    lead_status: match ? match.status : null\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1648,
+        2208
+      ],
+      "id": "54750294-37b3-4b0b-a60f-f1096298b1a6",
+      "name": "Find Lead"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "496effe6-569e-41f8-87f7-b8709cdbba33",
+              "leftValue": "={{ $json.lead_found }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -1424,
+        2208
+      ],
+      "id": "7d404ad0-adf0-4e79-9599-b7d0e71705fc",
+      "name": "If Lead Found"
+    },
+    {
+      "parameters": {
+        "chatId": "YOUR_TELEGRAM_CHAT_ID",
+        "text": "=⚠️ ACTIVITY LOG FAILED\n\nlead_id: {{ $json.lead_id }}\nactivity_type: {{ $json.activity_type }}\n\n❌ No matching lead found in Sheet1. Activity was NOT recorded.",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -1200,
+        2304
+      ],
+      "id": "cfa10558-b83e-462c-8c20-9ad9097a80e6",
+      "name": "Notify Invalid Activity",
+      "webhookId": "873b8c0e-b7d1-44e0-963b-85986e16caff",
+      "credentials": {
+        "telegramApi": {
+          "id": "YOUR_TELEGRAM_CREDENTIAL_ID",
+          "name": "Telegram account"
+        }
+      },
+      "onError": "continueRegularOutput",
+      "notes": "NEW v0.8.0: fires when lead_id on an incoming activity doesn't match any row in Sheet1."
+    },
+    {
+      "parameters": {
+        "jsCode": "const activity = $json;\n\nfunction randomBase36(length) {\n  let out = \"\";\n  while (out.length < length) {\n    out += Math.random().toString(36).slice(2);\n  }\n  return out.slice(0, length).toUpperCase();\n}\n\nconst now = new Date();\nconst datePart = now.toISOString().slice(0, 10).replace(/-/g, \"\");\nconst activityId = `ACT-${datePart}-${randomBase36(4)}`;\n\nconst CONTACT_TYPES = [\"CONTACTED\", \"REPLIED\", \"CALL\", \"MEETING\", \"PROPOSAL_SENT\", \"FOLLOW_UP\"];\n\nreturn [{\n  json: {\n    ...activity,\n    activity_id: activityId,\n    is_contact_activity: CONTACT_TYPES.includes(activity.activity_type)\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1200,
+        2112
+      ],
+      "id": "febde614-4da4-4c68-beb7-05fcf6cd5d43",
+      "name": "Generate Activity ID",
+      "notes": "NEW v0.8.0: ID = ACT-YYYYMMDD-XXXX, same collision-safe pattern as Generate Lead ID. Also flags whether this activity_type should refresh last_contacted_at."
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "YOUR_LEADS_SPREADSHEET_ID",
+          "mode": "list",
+          "cachedResultName": "Automated Business Leads",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_LEADS_SPREADSHEET_ID/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1167503469,
+          "mode": "list",
+          "cachedResultName": "Lead Activities",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_LEADS_SPREADSHEET_ID/edit#gid=1167503469"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "activity_id": "={{ $json.activity_id }}",
+            "lead_id": "={{ $json.lead_id }}",
+            "activity_type": "={{ $json.activity_type }}",
+            "channel": "={{ $json.channel }}",
+            "description": "={{ $json.description }}",
+            "created_at": "={{ $json.created_at }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "activity_id",
+              "displayName": "activity_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "lead_id",
+              "displayName": "lead_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "activity_type",
+              "displayName": "activity_type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "channel",
+              "displayName": "channel",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "description",
+              "displayName": "description",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "created_at",
+              "displayName": "created_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -976,
+        2112
+      ],
+      "id": "61b1477a-cadf-48a5-8f21-3f9b51758a5b",
+      "name": "Append Lead Activities",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "YOUR_GOOGLE_SHEETS_CREDENTIAL_ID",
+          "name": "Google Sheets account"
+        }
+      },
+      "notes": "SETUP REQUIRED (the one manual step): create a new tab named 'Lead Activities' in the 'Automated Business Leads' spreadsheet with header row: activity_id, lead_id, activity_type, channel, description, created_at. Then open this node in n8n and reselect the sheet from the dropdown (the gid placeholder in this JSON cannot be known before the tab exists)."
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "f8626793-ab83-4af3-8f25-50fb29d3f912",
+              "leftValue": "={{ $('Generate Activity ID').item.json.is_contact_activity }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -752,
+        2112
+      ],
+      "id": "9311ac54-06a6-4e82-84be-514f6d7c7ee3",
+      "name": "If Should Update Last Contacted"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "YOUR_LEADS_SPREADSHEET_ID",
+          "mode": "list",
+          "cachedResultName": "Automated Business Leads",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_LEADS_SPREADSHEET_ID/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_LEADS_SPREADSHEET_ID/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "lead_id": "={{ $json.lead_id }}",
+            "last_contacted_at": "={{ new Date().toISOString() }}",
+            "row_number": 0
+          },
+          "matchingColumns": [
+            "lead_id"
+          ],
+          "schema": [
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "email",
+              "displayName": "email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "phone",
+              "displayName": "phone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "business",
+              "displayName": "business",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "service",
+              "displayName": "service",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "budget",
+              "displayName": "budget",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "score",
+              "displayName": "score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "priority",
+              "displayName": "priority",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "scoring_reasons",
+              "displayName": "scoring_reasons",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "lead_id",
+              "displayName": "lead_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "last_contacted_at",
+              "displayName": "last_contacted_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "next_follow_up_at",
+              "displayName": "next_follow_up_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "last_reminded_at",
+              "displayName": "last_reminded_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "created_at",
+              "displayName": "created_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -528,
+        2112
+      ],
+      "id": "6e861dc4-1625-42b2-91b5-f014a14cbea4",
+      "name": "Update Last Contacted",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "YOUR_GOOGLE_SHEETS_CREDENTIAL_ID",
+          "name": "Google Sheets account"
+        }
+      },
+      "notes": "NEW v0.8.0: matches Sheet1 row by lead_id and stamps last_contacted_at whenever a contact-type activity (CONTACTED, REPLIED, CALL, MEETING, PROPOSAL_SENT, FOLLOW_UP) is logged."
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 8 * * *"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -2544,
+        2528
+      ],
+      "id": "3479f001-166b-4cbb-bef9-dd6d221835f0",
+      "name": "Lead Intelligence Schedule Trigger",
+      "notes": "NEW v0.8.0: runs daily at 08:00 (n8n instance timezone), one hour before Follow-up Schedule Trigger. Adjust cron in n8n UI if a different time is wanted."
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "YOUR_LEADS_SPREADSHEET_ID",
+          "mode": "list",
+          "cachedResultName": "Automated Business Leads",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_LEADS_SPREADSHEET_ID/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_LEADS_SPREADSHEET_ID/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -2320,
+        2528
+      ],
+      "id": "7baf8dbd-1194-4913-a196-f69998a07a21",
+      "name": "Get All Leads (Intelligence)",
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "YOUR_GOOGLE_SHEETS_CREDENTIAL_ID",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const now = new Date();\nconst ACTIVE_PIPELINE_STATUSES = [\"NEW\", \"CONTACTED\", \"QUALIFIED\", \"PROPOSAL\"];\nconst FOLLOWUP_STATUSES = [\"CONTACTED\", \"QUALIFIED\", \"PROPOSAL\"];\n\nconst rows = $input.all().map(i => i.json).filter(r => r.lead_id);\n\nfunction daysBetween(dateStr, ref) {\n  const d = new Date(dateStr);\n  if (isNaN(d.getTime())) return null;\n  return Math.floor((ref - d) / (1000 * 60 * 60 * 24));\n}\n\nlet counts = { NEW: 0, CONTACTED: 0, QUALIFIED: 0, PROPOSAL: 0, WON: 0, LOST: 0, DUPLICATE: 0, INVALID: 0 };\nlet highPriorityCount = 0;\nlet overdueCount = 0;\nlet staleCount = 0;\nlet atRiskCount = 0;\nlet pipelineValue = 0;\n\nfor (const lead of rows) {\n  if (counts.hasOwnProperty(lead.status)) counts[lead.status]++;\n  if (lead.priority === \"HIGH\") highPriorityCount++;\n\n  if (ACTIVE_PIPELINE_STATUSES.includes(lead.status)) {\n    pipelineValue += Number(lead.budget) || 0;\n  }\n\n  // Follow-up overdue\n  if (FOLLOWUP_STATUSES.includes(lead.status) && lead.next_follow_up_at) {\n    const overdueDays = daysBetween(lead.next_follow_up_at, now);\n    if (overdueDays !== null && overdueDays > 0) overdueCount++;\n  }\n\n  // Stale / at-risk based on last_contacted_at\n  if (FOLLOWUP_STATUSES.includes(lead.status) && lead.last_contacted_at) {\n    const sinceContact = daysBetween(lead.last_contacted_at, now);\n    if (sinceContact !== null) {\n      if (sinceContact >= 8) staleCount++;\n      else if (sinceContact >= 4) atRiskCount++;\n    }\n  }\n}\n\nconst totalLeads = rows.length;\nconst qualifiedOrLater = rows.filter(r => [\"QUALIFIED\", \"PROPOSAL\", \"WON\"].includes(r.status)).length;\nconst proposalOrLater = rows.filter(r => [\"PROPOSAL\", \"WON\"].includes(r.status)).length;\nconst won = counts.WON;\n\nconst leadToWonRate = totalLeads ? ((won / totalLeads) * 100).toFixed(1) : \"0.0\";\nconst qualifiedToWonRate = qualifiedOrLater ? ((won / qualifiedOrLater) * 100).toFixed(1) : \"0.0\";\nconst proposalToWonRate = proposalOrLater ? ((won / proposalOrLater) * 100).toFixed(1) : \"0.0\";\n\nreturn [{\n  json: {\n    date: now.toISOString().slice(0, 10),\n    total_leads: totalLeads,\n    counts,\n    high_priority_count: highPriorityCount,\n    overdue_count: overdueCount,\n    at_risk_count: atRiskCount,\n    stale_count: staleCount,\n    pipeline_value: pipelineValue,\n    lead_to_won_rate: leadToWonRate,\n    qualified_to_won_rate: qualifiedToWonRate,\n    proposal_to_won_rate: proposalToWonRate\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -2096,
+        2528
+      ],
+      "id": "dee97a57-8bab-477c-ae0d-541aa3204583",
+      "name": "Calculate Lead Intelligence",
+      "notes": "NEW v0.8.0: computes pipeline value (NEW/CONTACTED/QUALIFIED/PROPOSAL budgets), overdue count (next_follow_up_at passed), at-risk/stale counts (0-3d ACTIVE, 4-7d AT_RISK, 8+d STALE based on last_contacted_at), and conversion rates (Lead->Won, Qualified->Won, Proposal->Won)."
+    },
+    {
+      "parameters": {
+        "chatId": "YOUR_TELEGRAM_CHAT_ID",
+        "text": "=📊 DAILY LEAD SUMMARY\n\n📅 {{ $json.date }}\n\nTotal Leads: {{ $json.total_leads }}\n\n🆕 NEW: {{ $json.counts.NEW }}\n📞 CONTACTED: {{ $json.counts.CONTACTED }}\n✅ QUALIFIED: {{ $json.counts.QUALIFIED }}\n📄 PROPOSAL: {{ $json.counts.PROPOSAL }}\n🏆 WON: {{ $json.counts.WON }}\n❌ LOST: {{ $json.counts.LOST }}\n\n🔥 HIGH PRIORITY: {{ $json.high_priority_count }}\n\n⚠️ OVERDUE: {{ $json.overdue_count }}\n🟡 AT RISK: {{ $json.at_risk_count }}\n🚨 STALE: {{ $json.stale_count }}\n\n💰 Potential Pipeline: Rp{{ Number($json.pipeline_value).toLocaleString('id-ID') }}\n\n📈 Conversion:\nLead → Won: {{ $json.lead_to_won_rate }}%\nQualified → Won: {{ $json.qualified_to_won_rate }}%\nProposal → Won: {{ $json.proposal_to_won_rate }}%",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -1872,
+        2528
+      ],
+      "id": "da173df5-c3ab-4582-9654-a7a63181bcc0",
+      "name": "Send Daily Summary",
+      "webhookId": "1e44060d-3a6f-47dc-8036-e69a57c64cb7",
+      "credentials": {
+        "telegramApi": {
+          "id": "YOUR_TELEGRAM_CREDENTIAL_ID",
+          "name": "Telegram account"
+        }
+      },
+      "onError": "continueRegularOutput"
     }
   ],
   "pinData": {},
@@ -1560,6 +2433,145 @@
           }
         ]
       ]
+    },
+    "Webhook - Activity": {
+      "main": [
+        [
+          {
+            "node": "Normalize + Validate Activity",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize + Validate Activity": {
+      "main": [
+        [
+          {
+            "node": "If Activity Valid",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If Activity Valid": {
+      "main": [
+        [
+          {
+            "node": "Get All Leads (Find by ID)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get All Leads (Find by ID)": {
+      "main": [
+        [
+          {
+            "node": "Find Lead",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Find Lead": {
+      "main": [
+        [
+          {
+            "node": "If Lead Found",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If Lead Found": {
+      "main": [
+        [
+          {
+            "node": "Generate Activity ID",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Notify Invalid Activity",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Activity ID": {
+      "main": [
+        [
+          {
+            "node": "Append Lead Activities",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append Lead Activities": {
+      "main": [
+        [
+          {
+            "node": "If Should Update Last Contacted",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If Should Update Last Contacted": {
+      "main": [
+        [
+          {
+            "node": "Update Last Contacted",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Lead Intelligence Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get All Leads (Intelligence)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get All Leads (Intelligence)": {
+      "main": [
+        [
+          {
+            "node": "Calculate Lead Intelligence",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calculate Lead Intelligence": {
+      "main": [
+        [
+          {
+            "node": "Send Daily Summary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "active": true,
@@ -1567,11 +2579,12 @@
     "executionOrder": "v1",
     "binaryMode": "separate"
   },
-  "versionId": "65169809-4ff3-4b87-8545-2761921609eb",
+  "versionId": "63cd35b6-65dd-429b-beae-f67c2bc5f01c",
   "meta": {
-    "templateCredsSetupCompleted": true
+    "templateCredsSetupCompleted": true,
+    "instanceId": "YOUR_INSTANCE_ID"
   },
   "nodeGroups": [],
-  "id": "uz56AD9yZp5sYsTq",
+  "id": "YOUR_WORKFLOW_ID",
   "tags": []
 }
